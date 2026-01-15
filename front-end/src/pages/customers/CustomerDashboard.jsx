@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useProfile } from "../../context/ProfileContext.jsx"
+
 import { handleSuccess, handleError } from "../../util";
 import { useAuth } from "../../context/AuthContext.jsx";
 import Header from "../../components/Header.jsx"
