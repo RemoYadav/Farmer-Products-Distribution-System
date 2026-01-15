@@ -32,18 +32,14 @@ const App = () => {
         setRole={setRole}
         setLoading={setLoading}
       />
-      {loading ? (
-        <div className="flex items-center justify-center h-screen">
-          Checking authentication...
-        </div>
-      ) : (
+      
       <Routes>
         {/* PUBLIC */}
         <Route path="/login" element={<Login   setIsAuthenticated={setIsAuthenticated}
         setRole={setRole}/>} />
         <Route path="/forgot" element={<Forgot />} />
 
-        {/* 🔐 CUSTOMER */}
+        {/* CUSTOMER */}
         <Route
           element={
             <PrivateRoute
@@ -61,7 +57,7 @@ const App = () => {
           <Route path="/page/profile" element={<CustomerProfile />} />
         </Route>
 
-        {/* 🌾 FARMER */}
+        {/* FARMER */}
         <Route
           element={
             <PrivateRoute
@@ -93,7 +89,7 @@ const App = () => {
           <Route path="/admin/orders/:id" element={<AdminOrders />} />
         </Route>
       </Routes>
-      )}
+     
     </div>
     
   );
