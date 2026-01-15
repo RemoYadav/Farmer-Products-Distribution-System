@@ -23,6 +23,7 @@ const Referesh = ({ setIsAuthenticated, setRole, setLoading }) => {
       } else {
         setIsAuthenticated(true);
         setRole(decoded.role);
+        
       }
     } catch (err) {
       localStorage.removeItem("token");
