@@ -28,7 +28,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "./css/CustomerMyOrders.css"
 import { handleSuccess, handleError } from "../../util";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header"
+import Header from "../../components/Header"
 export default function CustomerMyOrders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
