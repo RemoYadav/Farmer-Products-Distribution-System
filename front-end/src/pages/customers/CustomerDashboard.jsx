@@ -40,20 +40,10 @@ import axios from "axios";
 export default function CustomerDashboard() {
     const [activeNavigation, setActiveNavigation] = useState("home")
     const [email, setEmail] = useState(null)
-    const [isLoading, setIsLoading] = useState(true);
-
-    const token = localStorage.getItem("token");
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     useEffect(() => {
         setEmail(localStorage.getItem("email"));
     }, []);
-    if (isLoading) {
-    return (
-      <div className="loader-overlay">
-        <div className="spinner2"></div>
-      </div>
-    );
-  }
+    
     return (
         <div className="customer-dashboard">
             {/* Header */}
