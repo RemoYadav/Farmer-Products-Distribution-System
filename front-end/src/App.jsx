@@ -35,7 +35,7 @@ const App = () => {
       
       <Routes>
         {/* PUBLIC */}
-        <Route path="*" element={<Login   setIsAuthenticated={setIsAuthenticated}
+        <Route path="/login" element={<Login   setIsAuthenticated={setIsAuthenticated}
         setRole={setRole}/>} />
         <Route path="/forgot" element={<Forgot />} />
 
