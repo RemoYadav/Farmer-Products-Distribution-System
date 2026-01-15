@@ -63,6 +63,7 @@ const [isLoading, setIsLoading] = useState(true);
 
       } catch (error) {
         console.error("Error fetching orders", error);
+        handleError( "Failed to load orders");
         setOrders([]); // fallback
       }
       finally { setIsLoading(false);

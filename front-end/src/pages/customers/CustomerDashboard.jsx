@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import { useProfile } from "../../context/ProfileContext.jsx"
+
 import { handleSuccess, handleError } from "../../util";
-
-import Header from "./CustomerHeader.jsx"
-
+import { useAuth } from "../../context/AuthContext.jsx";
+import Header from "../../components/Header.jsx"
+// import CustomerProfile from "../component/CustomerProfile"
 import {
     ShoppingBag,
     Clock,

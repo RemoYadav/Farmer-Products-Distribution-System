@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "./CustomerHeader"
+import Header from "../../components/header"
 import { toast, ToastContainer } from "react-toastify";
 import {
 

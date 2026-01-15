@@ -15,7 +15,7 @@ import {
     Mail,
     Award
 } from "lucide-react";
-import "./Market.css";
+import "./market.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
