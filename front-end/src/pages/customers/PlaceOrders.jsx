@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import Header from "../../components/header";
+import Header from "../../components/Header";
 import {
   User,
   Mail,
