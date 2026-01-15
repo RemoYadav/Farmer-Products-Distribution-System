@@ -13,8 +13,7 @@ import Profile from "./pages/farmers/Profile";
 import Products from "./pages/farmers/Products";
 import About from "./pages/farmers/About";
 import FarmerOrders from "./pages/farmers/FarmerOrders";
-
-import { CustomerDashboard } from "./pages/customers/CustomerDashboard";
+import  CustomerDashboard from "./pages/customers/CustomerDashboard";
 import CustomerMyOrders from "./pages/customers/CustomerMyOrders";
 import PlaceOrders from "./pages/customers/PlaceOrders";
 import CustomerProfile from "./pages/customers/Profile";
@@ -52,7 +51,7 @@ const App = () => {
           }
         >
           <Route path="/page/customer/dashboard" element={<CustomerDashboard />} />
-          <Route path="/page/market" element={<Market />} />
+          <Route path="/page/marcket" element={<Market />} />
           <Route path="/page/show-orders" element={<CustomerMyOrders />} />
           <Route path="/page/place-order" element={<PlaceOrders />} />
           <Route path="/page/place-order/:productId" element={<PlaceOrders />} />

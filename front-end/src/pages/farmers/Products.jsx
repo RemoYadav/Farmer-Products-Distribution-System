@@ -113,7 +113,7 @@ export default function Products() {
           setIsLoading(false)
         }
       } catch (error) {
-        console.error("Fetch products error:", error);
+        handleError("Server not responding. Please try again later.");
       } finally {
         setIsLoading(false);
       }
@@ -367,7 +367,7 @@ export default function Products() {
     const filtered = products.filter((p) =>
       p.productName.toLowerCase().includes(query) ||
       p.category.toLowerCase().includes(query)
-     
+
     );
 
     setFilteredProducts(filtered);

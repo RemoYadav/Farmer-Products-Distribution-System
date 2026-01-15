@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import Header from "../../components/header";
+import { handleSuccess, handleError } from "../../util";
+import Header from "./CustomerHeader";
 import {
   User,
   Mail,
@@ -15,26 +16,23 @@ import {
   Check,
   AlertCircle,
   Leaf,
-  
+
 } from "lucide-react";
 // import { toast } from "sonner";
 import "./css/PlaceOrders.css";
-
 export default function PlaceOrders() {
-
-
   //  get prodcutId from market
   const { productId } = useParams();
   const token = localStorage.getItem("token");
-  const [email,setEmail] = useState("")
+  const [email, setEmail] = useState("")
   useEffect(() => {
-  setEmail(localStorage.getItem("email") || "");
-}, []);
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    setEmail(localStorage.getItem("email") || "");
+  }, []);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
-const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   const [orderData, setOrderData] = useState({
     customerName: "",
@@ -49,7 +47,7 @@ const [profile, setProfile] = useState(null);
   });
   const fetchProfile = async () => {
     try {
-      const url =`${API_BASE_URL}/api/customer/profile`;
+      const url = `${API_BASE_URL}/api/customer/profile`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -65,13 +63,16 @@ const [profile, setProfile] = useState(null);
       }
     } catch (err) {
 
-      toast.error("Error fetching profile");
+      handleError("Error fetching profile");
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [API_BASE_URL, token]);
   useEffect(() => {
     if (profile) {
       setOrderData(prev => ({
@@ -134,8 +135,8 @@ const [profile, setProfile] = useState(null);
         newErrors.deliveryDate = "Delivery date cannot be in the past";
       }
     }
+    setErrors(newErrors);
 
-   
     return Object.keys(newErrors).length === 0;
   };
   const [productsAvailable, setProductsAvailable] = useState([]);
@@ -236,7 +237,7 @@ const [profile, setProfile] = useState(null);
           totalPrice
         };
         // CREATE PRODUCT
-        const res = await fetch("http://localhost:8080/api/orders", {
+        const res = await fetch(`${API_BASE_URL}/api/orders`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +249,7 @@ const [profile, setProfile] = useState(null);
         console.log(result)
         const { success, message } = result;
         if (success) {
-          toast.success(message);
+          handleSuccess(message);
           setTimeout(() => {
             // setProducts([...products, data.product]);
 
@@ -267,15 +268,12 @@ const [profile, setProfile] = useState(null);
       } catch (err) {
         console.error(err);
         setIsSubmitting(false);
-        toast.error("front Server error");
+        handleError("front Server error");
       }
     } else {
       setIsSubmitting(false);
-      toast("error")
+      handleError("Please check your form submission");
     }
-
-
-
   };
 
 
@@ -286,14 +284,20 @@ const [profile, setProfile] = useState(null);
     return tomorrow.toISOString().split('T')[0];
   };
 
-
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="spinner2"></div>
+      </div>
+    );
+  }
   return (
     <div>
-        <Header/>
+      <Header />
       <div className="order-container">
         {/* Header */}
-        
-       
+
+
         <div className="order-content">
           <div className="order-card">
             {/* Header */}
@@ -486,7 +490,7 @@ const [profile, setProfile] = useState(null);
                         min={getMinDate()}
                         value={orderData.deliveryDate}
                         onChange={orderhandleChange}
-                        className={ "input-error"}
+                        className={errors.deliveryDate ? "input-error" : ""}
                       />
                     </div>
                     {errors.deliveryDate && (
@@ -551,31 +555,31 @@ const [profile, setProfile] = useState(null);
               </p>
             </form>
           </div>
-
-          {/* Info Cards */}
-          <div className="info-cards">
-            <div className="info-card">
-              <div className="info-card-icon green">
-                <Leaf className="card-icon" />
+          <div className="flex justify-center">          {/* Info Cards */}
+            <div className="info-cards">
+              <div className="info-card">
+                <div className="info-card-icon green">
+                  <Leaf className="card-icon" />
+                </div>
+                <h3>100% Organic</h3>
+                <p>All our produce is certified organic and grown without harmful pesticides</p>
               </div>
-              <h3>100% Organic</h3>
-              <p>All our produce is certified organic and grown without harmful pesticides</p>
-            </div>
 
-            <div className="info-card">
-              <div className="info-card-icon blue">
-                <Package className="card-icon" />
+              <div className="info-card">
+                <div className="info-card-icon blue">
+                  <Package className="card-icon" />
+                </div>
+                <h3>Farm Fresh</h3>
+                <p>Harvested within 24 hours of delivery to ensure maximum freshness</p>
               </div>
-              <h3>Farm Fresh</h3>
-              <p>Harvested within 24 hours of delivery to ensure maximum freshness</p>
-            </div>
 
-            <div className="info-card">
-              <div className="info-card-icon orange">
-                <ShoppingCart className="card-icon" />
+              <div className="info-card">
+                <div className="info-card-icon orange">
+                  <ShoppingCart className="card-icon" />
+                </div>
+                <h3>Direct from Farm</h3>
+                <p>Support local agriculture by ordering directly from our family farm</p>
               </div>
-              <h3>Direct from Farm</h3>
-              <p>Support local agriculture by ordering directly from our family farm</p>
             </div>
           </div>
         </div>

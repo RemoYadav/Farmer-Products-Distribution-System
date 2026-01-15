@@ -12,7 +12,6 @@ const Referesh = ({ setIsAuthenticated, setRole, setLoading }) => {
 
     try {
       const decoded = jwtDecode(token);
-
       if (decoded.exp * 1000 < Date.now()) {
         localStorage.removeItem("token");
         setIsAuthenticated(false);

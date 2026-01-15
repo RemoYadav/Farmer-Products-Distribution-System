@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-
+import Header from "./AdminHeader";
 import { handleSuccess, handleError } from "../../util";
 import AdminOrder from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
@@ -44,19 +44,17 @@ import { Link, Navigate } from "react-router-dom";
 
 
 export function AdminDashboard() {
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [securityLogs, setSecurityLogs] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterUserType, setFilterUserType] = useState("all");
   const [email, setEmail] = useState("");
-  const [showUserMenu, setShowUserMenu] = useState(false);
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   }, []);
@@ -68,7 +66,7 @@ export function AdminDashboard() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:8080/api/products", {
+        const res = await fetch(`${API_BASE_URL}/api/products`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -87,10 +85,10 @@ export function AdminDashboard() {
               unit: p.unit,
               stock: p.stock,
               description: p.description,
-              imagePreview: p.image ? `http://localhost:8080/${p.image}` : null// base64 or image path
+              imagePreview: p.image ? `${API_BASE_URL}/${p.image}` : null// base64 or image path
             }))
           );
-
+          isLoading(false);
           // Optional cache
 
         } else {
@@ -99,6 +97,7 @@ export function AdminDashboard() {
       } catch (error) {
         console.error("Fetch products error:", error);
       }
+      finally { setIsLoading(false); }
     };
 
     fetchProducts();
@@ -109,7 +108,7 @@ export function AdminDashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:8080/admin/login-activity", {
+    fetch(`${API_BASE_URL}/admin/login-activity`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -118,16 +117,12 @@ export function AdminDashboard() {
       .then(data => setSecurityLogs(data));
   }, []);
 
-
-  // Get statistics
-  //  const API_BASE = "http://localhost:8080/admin";
-
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:8080/admin/stats", {
+    fetch(`${API_BASE_URL}/admin/stats`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
@@ -138,13 +133,9 @@ export function AdminDashboard() {
       .catch(err => console.error("Stats error:", err));
 
   }, []);
-  // useEffect(() => {
-  //   fetch(`${API_BASE}/stats`)
-  //     .then(res => res.json())
-  //     .then(data => setStats(data))
-  //     .catch(err => console.error("Stats error:", err));
-  // }, []);
-
+  const saveUsers = (updatedUsers) => {
+    setUsers(updatedUsers);
+  };
   // Handle user actions
   const handleApproveUser = (userId) => {
     const updatedUsers = users.map(user =>
@@ -247,11 +238,11 @@ export function AdminDashboard() {
     setEditingProduct(product); // product must have _id
     setShowAddForm(true);
   };
-const handleDeleteProduct = async (_id) => {
+  const handleDeleteProduct = async (_id) => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `http://localhost:8080/api/products/delete${_id}`,
+        `${API_BASE_URL}/api/products/delete${_id}`,
         {
           method: "PATCH",
           headers: { Authorization: `Bearer ${token}` }
@@ -274,100 +265,18 @@ const handleDeleteProduct = async (_id) => {
     }
   };
 
-
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="spinner2"></div>
+      </div>
+    );
+  }
   return (
     <div className="admin-dashboard">
       {/* Header */}
-      <div className="admin-header">
-        <div className="admin-header-content">
-          <div className="admin-header-left">
-            <Shield className="admin-logo-icon" />
-            <div>
-              <h1>Admin Dashboard</h1>
-              <p id="aminp">System Management & Monitoring</p>
-            </div>
-          </div>
-          <div className="admin-user-info">
-
-            <div className="admin-user-details ">
-              <p className="user-name">Administrator</p>
-              <p id="user-role">Super Admin</p>
-            </div>
-            <div className="user-menu">
-              <button
-                className="menu-toggle"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
-                <User className="icon-sm" />
-              </button>
-              {showUserMenu && (
-                <div className="menu-content">
-                  <p className="menu-item btn-profile">
-                    <User className="icon-sm" />
-                    Profile</p>
-                  <p className="menu-item btn-settings">
-                    <Settings className="icon-sm" />
-                    Settings</p>
-                  <button
-                    className="menu-item btn-logout"
-                    onClick={  setShowUserMenu(!showUserMenu)}
-                  >
-                    <LogOut className="icon-sm" />
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="admin-container">
-        {/* Tab Navigation */}
-        <div className="admin-tabs">
-          <button
-            className={`tab-btn ${activeTab === "home" ? "active" : ""}`}
-            onClick={() => setActiveTab("home")}
-          >
-            <Home className="tab-icon" />
-            Home
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
-            onClick={() => setActiveTab("overview")}
-          >
-            <BarChart3 className="tab-icon" />
-            Overview
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "users" ? "active" : ""}`}
-            onClick={() => setActiveTab("users")}
-          >
-            <Users className="tab-icon" />
-            Users
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "orders" ? "active" : ""}`}
-            onClick={() => setActiveTab("orders")}
-          >
-            <ShoppingBag className="tab-icon" />
-            Orders
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "products" ? "active" : ""}`}
-            onClick={() => setActiveTab("products")}
-          >
-            <Package className="tab-icon" />
-            Products
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "security" ? "active" : ""}`}
-            onClick={() => setActiveTab("security")}
-          >
-            <Shield className="tab-icon" />
-            Security
-          </button>
-        </div>
+      <Header />
+      <div>
 
         {/* Home Tab */}
         {activeTab === "home" && (

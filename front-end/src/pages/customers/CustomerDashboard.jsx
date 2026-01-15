@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 // import { useProfile } from "../../context/ProfileContext.jsx"
 import { handleSuccess, handleError } from "../../util";
-import { useAuth } from "../../context/AuthContext.jsx";
-import Header from "../../components/Header.jsx"
-// import CustomerProfile from "../component/CustomerProfile"
+
+import Header from "./CustomerHeader.jsx"
+
 import {
     ShoppingBag,
     Clock,
@@ -33,33 +33,27 @@ import {
     AlertCircle,
     Settings
 } from "lucide-react";
-// import { toast } from "sonner";
 import "./css/CustomerDashboard.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-export function CustomerDashboard() {
-    const navigate = useNavigate();
-    const { logOut } = useAuth()
-    // const { fetchCustomerProfile, userName, profileImage } = useProfile();
+export default function CustomerDashboard() {
     const [activeNavigation, setActiveNavigation] = useState("home")
-    const [showUserMenu, setShowUserMenu] = useState(false)
     const [email, setEmail] = useState(null)
-    const goToPlaceOrder = () => {
-        navigate("/place-order");
-    }
-    const goToMarcket = () => {
-        navigate("/marcket");
-    }
-    const goToShowOrder = () => {
-        navigate("/show-orders");
-    }
-    useEffect(() => {
-        // fetchCustomerProfile();
-    }, []);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const token = localStorage.getItem("token");
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     useEffect(() => {
         setEmail(localStorage.getItem("email"));
     }, []);
+    if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="spinner2"></div>
+      </div>
+    );
+  }
     return (
         <div className="customer-dashboard">
             {/* Header */}

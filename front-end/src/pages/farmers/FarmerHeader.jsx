@@ -44,7 +44,6 @@ const FarmerHeader = () => {
   const [farmName, setFarmName] = useState("");
   const [userName, setUserName] = useState("");
   const [profileImage, setProfileImage] = useState("/default.jpg");
-
   const token = localStorage.getItem("token");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -77,9 +76,9 @@ const FarmerHeader = () => {
         );
 
         const data = await res.json();
-console.log(data.profile)
         if (data.success && data.profile) {
           setUserName(data.profile.fullName || "Guest");
+          setFarmName(data.profile.farmName || "Farm Name");
           setProfileImage(
             data.profile.image
               ? `${API_BASE_URL}${data.profile.image.replace(/\\/g, "/")}`

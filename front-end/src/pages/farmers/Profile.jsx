@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import FarmerHeader from "./FarmerHeader"
 
 import {
- 
+
   AlertCircle,
-   User,
+  User,
   Users,
   Home,
   BarChart3,
@@ -17,17 +17,15 @@ import {
   MapPin,
 
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-// import { toast } from "sonner@2.0.3";
 
 
 import { ToastContainer, toast } from "react-toastify";
 import { handleSuccess, handleError } from "../../util";
-export  default function Profile() {
+export default function Profile() {
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [email, setEmail] = useState("");
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(true);
@@ -37,9 +35,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     fetchProfile()
   }, [])
-  const navigate = useNavigate();
 
-  // Mock farmer data - In a real app, this would come from authentication
 
 
 
@@ -63,10 +59,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     profileImageUrl: ""
   });
   const [previewImage, setPreviewImage] = useState("");
-
   const [errors, setErrors] = useState({});
-
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -77,41 +70,35 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       setErrors({ ...errors, [e.target.name]: "" });
     }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFormData(prev => ({ ...prev, profileImageUrl: file }));
-     
+
     }
   };
-
   const handleNext = () => {
     if (validateStep(currentStep)) {
       if (currentStep < 3) setCurrentStep(currentStep + 1);
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
   const validateStep = (step) => {
     const newErrors = {};
-
     if (step === 1) {
       if (!formData.fullName) newErrors.fullName = "Full name is required";
       if (!formData.email) newErrors.email = "Email is required";
       else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email format";
       if (!formData.phone) newErrors.phone = "Phone number is required";
     }
-
     if (step === 2) {
       if (!formData.farmName) newErrors.farmName = "Farm name is required";
       if (!formData.location) newErrors.location = "Location is required";
       if (!formData.address) newErrors.address = "Address is required";
       if (!formData.city) newErrors.city = "City is required";
     }
-
     if (step === 3) {
       if (!formData.farmSize) newErrors.farmSize = "Farm size is required";
       if (!agreedToTerms) newErrors.terms = "You must agree to terms";
@@ -138,14 +125,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       profileImageUrl: "",
       bio: formData.bio,
     };
-
-    // if (formData.profileImageUrl instanceof File) {
-    //   form.append("profileImage", formData.profileImageUrl);
-    // }
     if (validateStep(3)) {
 
       try {
-        const url = "http://localhost:8080/api/farmer/profile";
+        const url = `${API_BASE_URL}/api/farmer/profile`;
         const response = await fetch(url, {
           method: "PUT",
           headers: {
@@ -165,7 +148,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
         }
       } catch (err) {
         console.error("SAVE PROFILE ERROR:", err);
-        toast.error("An error occurred while Saving profile");
+        handleError("Server not responding. Please try again later.");
       }
     }
   };
@@ -202,21 +185,18 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
         }); // populate form fields
         setPreviewImage(result.profile.profileImageUrl || "");
       }
-       setIsLoading(false)
+      setIsLoading(false)
     } catch (err) {
-      // console.log(err)
-      toast.error("Error fetching profile");
+      console.log(err)
+      handleError("Server not responding. Please try again later.");
     }
   };
-
-
-
 
   // place oreder submit
   const progress = (currentStep / 3) * 100;
 
   // handle product data 
-if (isLoading) {
+  if (isLoading) {
     return (
       <div className="loader-overlay">
         <div className="spinner2"></div>
@@ -227,7 +207,7 @@ if (isLoading) {
     <div className="dashboard-container">
       {/* Header */}
       <div>
-        <FarmerHeader/>
+        <FarmerHeader />
       </div>
       {/* { farmer Profile form} */}
 
@@ -240,7 +220,7 @@ if (isLoading) {
                 {/* <Leaf className="size-8" /> */}
                 <h1 className="text-white">Farmer Registration</h1>
               </div>
-          
+
 
               <div className="mt-6">
                 <div className="flex justify-between text-sm mb-2">

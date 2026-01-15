@@ -3,56 +3,22 @@ import { useNavigate } from "react-router-dom";
 import FarmerHeader from "./FarmerHeader"
 import "./css/About.css"
 import {
-
-
-  Package,
   Clock,
   CheckCircle,
-  XCircle,
-  TrendingUp,
-  AlertCircle,
-  Search,
-  Filter,
-  Eye,
-  Check,
-  Save,
   Heart,
   X,
   Sprout,
   Sun,
   Award,
   Droplet,
-  Tag,
-  IndianRupee,
-  Edit,
-  Trash2,
-  ImageIcon,
-  User,
-  Users,
-  Home,
-  BarChart3,
-  ShoppingBag,
-  Shield,
   Phone,
-  Plus,
   Mail,
   MapPin,
-  Calendar,
-  DollarSign,
+  
   Leaf,
-  LogOut,
-  UserCircle,
-  Settings
 } from "lucide-react";
-
-
 export default function FarmerAbout() {
- 
-  const navigate = useNavigate()
-  
   const token = localStorage.getItem("token");
-
-  
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState("");
   const [formData, setFormData] = useState({
@@ -78,7 +44,7 @@ export default function FarmerAbout() {
   const fetchProfile = async () => {
     try {
        setIsLoading(true)
-      const url = "http://localhost:8080/api/farmer/profile";
+      const url = `${API_BASE_URL}/api/farmer/profile`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -97,20 +63,17 @@ export default function FarmerAbout() {
       toast.error("Error fetching profile");
     }
     finally {
-        setLoading(false);
+        setIsLoading(false);
       }
   };
 
   useEffect(() => {
     fetchProfile();
   }, []);
-
-
   const mission = {
     title: "Our Mission",
     description: "At Green Valley Farm, we're committed to sustainable farming practices that nurture the land and provide our community with the freshest, healthiest organic produce. We believe in transparency, quality, and building lasting relationships with our customers."
   };
-
   const values = [
     {
       icon: Leaf,
@@ -133,10 +96,9 @@ export default function FarmerAbout() {
       description: "We grow seasonal produce at peak freshness and flavor."
     }
   ];
-
   const team = [
     {
-      name: "John Farmer",
+      name: "Farmer",
       role: "Farm Owner & Manager",
       description: "Third-generation farmer with 30+ years of experience in organic agriculture."
     },

@@ -74,7 +74,7 @@ const Login = () => {
             setTimeout(() => {
               if (result.role === "admin") navigate("/admin/dashboard");
               else if (result.role === "farmer") navigate("/farmer/dashboard");
-              else navigate("/page/customer/dashboard");
+              else if (result.role === "customer") navigate("/page/customer/dashboard");
             }, 1000);
           }
 

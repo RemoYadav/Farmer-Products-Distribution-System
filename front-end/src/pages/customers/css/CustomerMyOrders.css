@@ -36,12 +36,13 @@
 }
 
 .stat-icon-wrapper {
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap:2px;
 }
 
 .stat-icon-wrapper.green {
@@ -64,7 +65,7 @@
   background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
 }
 
-.stat-icon {
+.co-stat-icon {
   width: 1.5rem;
   height: 1.5rem;
   color: #2e7d32;
@@ -87,7 +88,9 @@
 }
 
 .stat-content {
-  flex: 1;
+ 
+  display: flex;
+  gap: 1rem;
 }
 
 .stat-label {

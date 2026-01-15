@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "../components/header.jsx";
+import Header from "./customers/CustomerHeader.jsx";
 import {
     Search,
     MapPin,
@@ -11,8 +11,8 @@ import {
     List,
     ChevronRight,
     Leaf,
-    Phone, 
-    Mail, 
+    Phone,
+    Mail,
     Award
 } from "lucide-react";
 import "./Market.css";
@@ -22,154 +22,155 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"
 
 export default function Market(props) {
-   const { onPlaceOrder } = props;
-   const navigate = useNavigate();
-       const [viewMode, setViewMode] = useState("grid");
-       const [searchQuery, setSearchQuery] = useState("");
-       const [selectedFarmer, setSelectedFarmer] = useState(null);
-       const [selectedProduct, setSelectedProduct] = useState(null);
-       const [filterCategory, setFilterCategory] = useState("all");
-       const [farmers, setFarmers] = useState([]);
-       const [loading, setLoading] = useState(true);
-       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-       const [error,setError] = useState("")
-   
-   console.log(farmers)
-       // Load
-       useEffect(() => {
-           const fetchFarmersProducts = async () => {
-               try {
-                   const res = await fetch( `${API_BASE_URL}/api/marcket/products`);
-   
-                   if (!res.ok) {
-                       throw new Error("Failed");
-                   }
-   
-                   const data = await res.json();
-                   setFarmers(data);
-            
-   
-   
-               } catch (err) {
-                   setError(err.message);
-               } finally {
-                   setLoading(false);
-               }
-           };
-   
-           fetchFarmersProducts();
-       }, []);
-   
-   
-   
-       const allProducts = [];
-       for (let i = 0; i < farmers.length; i++) {
-           const farmer = farmers[i];
-   
-           for (let j = 0; j < farmer.products.length; j++) {
-               const product = farmer.products[j];
-               allProducts.push({
-                   ...product,
-                   farmerName: farmer.name,
-                   farmerId: farmer.id,
-                   farmerLocation: farmer.location,
-                   farmerRating: farmer.rating
-               });
-           }
-       }
-   
-       const filteredFarmers = [];
-   
-       for (let i = 0; i < farmers.length; i++) {
-           const farmer = farmers[i];
-           const searchLower = searchQuery.toLowerCase();
-   
-           const nameMatch = (farmer.name || "").toLowerCase().includes(searchLower);
-           const locationMatch = (farmer.location || "").toLowerCase().includes(searchLower);
-           const ownerMatch = (farmer.owner || "").toLowerCase().includes(searchLower);
-   
-           if (nameMatch || locationMatch || ownerMatch) {
-               filteredFarmers.push(farmer);
-           }
-       }
-   
-       const filteredProducts = [];
-   
-       for (let i = 0; i < allProducts.length; i++) {
-           const product = allProducts[i];
-           const searchLower = searchQuery.toLowerCase();
-   
-           const matchesSearch =
-               (product.name || "").toLowerCase().includes(searchLower);
-   
-           const matchesCategory =
-               filterCategory === "all" ||
-               (product.category || "").toLowerCase() === filterCategory.toLowerCase();
-   
-           if (matchesSearch && matchesCategory) {
-               filteredProducts.push(product);
-           }
-       }
-   
-   
-       const handleFarmerClick = (farmer) => {
-           setSelectedFarmer(farmer);
-           setSelectedProduct(null);
-       };
-   
-       const handleProductClick = (product) => {
-           setSelectedProduct(product);
-       };
-   
-       // const handleOrderClick = (product) => {
-       //     if (onPlaceOrder) {
-       //         const farmer = farmers.find(f => f.id === product.farmerId);
-       //         onPlaceOrder({
-       //             product: product,
-       //             farmer: farmer
-       //         });
-       //     }
-   
-       // };
-       const handleOrderClick = (product) => {
-           //   const customer = JSON.parse(localStorage.getItem("user"));
-   
-           //   const farmer = farmers.find(f => f.id === product.farmerId);
-   
-           //   const orderPayload = {
-           //     product: {
-           //       id: product.id,
-           //     },
-           //     farmer: {
-           //       id: farmer.id,
-           //     }
-           //   };
-   
-           navigate(`/page/place-order/${product.id}`);
-       };
-   
-       const renderStars = (rating) => {
-           const stars = [];
-           for (let i = 0; i < 5; i++) {
-               const filled = i < Math.floor(rating);
-               const starClass = filled ? "star-filled" : "star-empty";
-               stars.push(
-                   <Star key={i} className={starClass} />
-               );
-           }
-           return stars;
-       };
-   
-       const gridClass = viewMode === "grid" ? "farmers-grid" : "farmers-list";
-       const isAllFilter = filterCategory === "all";
-       const isVegFilter = filterCategory === "vegetables";
-       const isHerbFilter = filterCategory === "herbs";
-       const isFruitsFilter = filterCategory === "fruits";
-       const isEggsFilter = filterCategory === "eggs";
-       const isChickenFilter = filterCategory === "chicken";
-   
+    const { onPlaceOrder } = props;
+    const navigate = useNavigate();
+    const [viewMode, setViewMode] = useState("grid");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedFarmer, setSelectedFarmer] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [filterCategory, setFilterCategory] = useState("all");
+    const [farmers, setFarmers] = useState([]);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(true);
+    // Load
+    useEffect(() => {
+        const fetchFarmersProducts = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/marcket/products`);
+
+                if (!res.ok) {
+                    throw new Error("Failed");
+                }
+
+                const data = await res.json();
+                setFarmers(data);
 
 
+
+            } catch (err) {
+                setError(err.message);
+                handleError("Server not responding. Please try again later.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchFarmersProducts();
+    }, []);
+
+
+
+    const allProducts = [];
+    for (let i = 0; i < farmers.length; i++) {
+        const farmer = farmers[i];
+
+        for (let j = 0; j < farmer.products.length; j++) {
+            const product = farmer.products[j];
+            allProducts.push({
+                ...product,
+                farmerName: farmer.name,
+                farmerId: farmer.id,
+                farmerLocation: farmer.location,
+                farmerRating: farmer.rating
+            });
+        }
+    }
+
+    const filteredFarmers = [];
+
+    for (let i = 0; i < farmers.length; i++) {
+        const farmer = farmers[i];
+        const searchLower = searchQuery.toLowerCase();
+
+        const nameMatch = (farmer.name || "").toLowerCase().includes(searchLower);
+        const locationMatch = (farmer.location || "").toLowerCase().includes(searchLower);
+        const ownerMatch = (farmer.owner || "").toLowerCase().includes(searchLower);
+
+        if (nameMatch || locationMatch || ownerMatch) {
+            filteredFarmers.push(farmer);
+        }
+    }
+
+    const filteredProducts = [];
+
+    for (let i = 0; i < allProducts.length; i++) {
+        const product = allProducts[i];
+        const searchLower = searchQuery.toLowerCase();
+
+        const matchesSearch =
+            (product.name || "").toLowerCase().includes(searchLower);
+
+        const matchesCategory =
+            filterCategory === "all" ||
+            (product.category || "").toLowerCase() === filterCategory.toLowerCase();
+
+        if (matchesSearch && matchesCategory) {
+            filteredProducts.push(product);
+        }
+    }
+    const handleFarmerClick = (farmer) => {
+        setSelectedFarmer(farmer);
+        setSelectedProduct(null);
+    };
+
+    const handleProductClick = (product) => {
+        setSelectedProduct(product);
+    };
+
+    // const handleOrderClick = (product) => {
+    //     if (onPlaceOrder) {
+    //         const farmer = farmers.find(f => f.id === product.farmerId);
+    //         onPlaceOrder({
+    //             product: product,
+    //             farmer: farmer
+    //         });
+    //     }
+
+    // };
+    const handleOrderClick = (product) => {
+        //   const customer = JSON.parse(localStorage.getItem("user"));
+
+        //   const farmer = farmers.find(f => f.id === product.farmerId);
+
+        //   const orderPayload = {
+        //     product: {
+        //       id: product.id,
+        //     },
+        //     farmer: {
+        //       id: farmer.id,
+        //     }
+        //   };
+
+        navigate(`/page/place-order/${product.id}`);
+    };
+
+    const renderStars = (rating) => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            const filled = i < Math.floor(rating);
+            const starClass = filled ? "star-filled" : "star-empty";
+            stars.push(
+                <Star key={i} className={starClass} />
+            );
+        }
+        return stars;
+    };
+
+    const gridClass = viewMode === "grid" ? "farmers-grid" : "farmers-list";
+    const isAllFilter = filterCategory === "all";
+    const isVegFilter = filterCategory === "vegetables";
+    const isHerbFilter = filterCategory === "herbs";
+    const isFruitsFilter = filterCategory === "fruits";
+    const isEggsFilter = filterCategory === "eggs";
+    const isChickenFilter = filterCategory === "chicken";
+    if (isLoading) {
+        return (
+            <div className="loader-overlay">
+                <div className="spinner2"></div>
+            </div>
+        );
+    }
     return (
         <div className="marketplace-container">
             <div>
@@ -322,7 +323,7 @@ export default function Market(props) {
                                                 <div className="product-stock">
                                                     <span className="stock-badge">{product.stock} {product.unit} available</span>
                                                 </div>
-                                                
+
                                                 <button
                                                     className="order-btn-small"
                                                     onClick={(e) => {

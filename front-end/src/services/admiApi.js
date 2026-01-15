@@ -1,10 +1,10 @@
-const API_BASE = "http://localhost:5000/api/admin";
+const API_BASE = "http://localhost:8080/api/admin";
 
 /* =========================
    GET ALL USERS
 ========================= */
 export const fetchAdminUsers = async () => {
-  const res = await fetch("http://localhost:8080/admin/users", {
+  const res = await fetch(`${API_BASE}/users`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },

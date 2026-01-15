@@ -28,11 +28,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "./css/CustomerMyOrders.css"
 import { handleSuccess, handleError } from "../../util";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header"
+import Header from "./CustomerHeader"
 export default function CustomerMyOrders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-
+const [isLoading, setIsLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,17 +41,7 @@ export default function CustomerMyOrders() {
 
 
   // Mock farmer data - In a real app, this would come from authentication
-  const currentFarmer = {
-    name: "Green Valley Farm",
-    email: "greenvalley@farm.com",
-    phone: "+977-980000000021"
-  };
-
-
-
   // Get status badge class
-
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -74,6 +64,8 @@ export default function CustomerMyOrders() {
       } catch (error) {
         console.error("Error fetching orders", error);
         setOrders([]); // fallback
+      }
+      finally { setIsLoading(false);
       }
     };
     fetchOrders();
@@ -160,18 +152,6 @@ export default function CustomerMyOrders() {
       day: "numeric"
     });
   };
-  // if (loading) {
-  //   return <p style={{ padding: "20px" }}>Loading...</p>;
-  // }
-
-
-  const goToMarcket = () => {
-    navigate("/marcket");
-  }
-
-  // place oreder submit
-
-
   const [productsAvailable, setProductsAvailable] = useState([]);
 
   // Load products from localStorage on mount
@@ -214,12 +194,20 @@ export default function CustomerMyOrders() {
       } catch (error) {
         console.error("Fetch products error:", error);
       }
+      finally { setIsLoading(false);
+      }
     };
 
     fetchProducts();
   }, []);
 
-
+if (isLoading) {
+    return (
+        <div className="loader-overlay">
+            <div className="spinner2"></div>
+        </div>
+    );
+}
   return (
     <div className="customer-Order-container">
       {/* Header */}
@@ -234,7 +222,7 @@ export default function CustomerMyOrders() {
           <div className="cd-stats">
             <div className="stat-card">
               <div className="stat-icon-wrapper green">
-                <ShoppingBag className="stat-icon" />
+                <ShoppingBag className="co-stat-icon" />
               </div>
               <div className="stat-content">
                 <p className="stat-label">Total Orders</p>
@@ -244,7 +232,7 @@ export default function CustomerMyOrders() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper yellow">
-                <Clock className="stat-icon" />
+                <Clock className="co-stat-icon" />
               </div>
               <div className="stat-content">
                 <p className="stat-label">Pending</p>
@@ -254,7 +242,7 @@ export default function CustomerMyOrders() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper blue">
-                <CheckCircle className="stat-icon" />
+                <CheckCircle className="co-stat-icon" />
               </div>
               <div className="stat-content">
                 <p className="stat-label">Approved</p>
@@ -264,7 +252,7 @@ export default function CustomerMyOrders() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper purple">
-                <Truck className="stat-icon" />
+                <Truck className="co-stat-icon" />
               </div>
               <div className="stat-content">
                 <p className="stat-label">Delivered</p>
@@ -274,11 +262,11 @@ export default function CustomerMyOrders() {
 
             <div className="stat-card highlighted">
               <div className="stat-icon-wrapper orange">
-                <TrendingUp className="stat-icon" />
+                <TrendingUp className="co-stat-icon" />
               </div>
               <div className="stat-content">
                 <p className="stat-label">Total Spent</p>
-                <p className="stat-value">${stats.totalSpent}</p>
+                <p className="stat-value">रु-{stats.totalSpent}</p>
               </div>
             </div>
           </div>

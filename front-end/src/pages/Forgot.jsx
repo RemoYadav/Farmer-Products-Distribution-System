@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { User, Mail, Phone, MapPin, Leaf, Lock, Check, AlertCircle } from "lucide-react";
+import React, { useState} from "react";
+import { Mail, Lock, Check, AlertCircle } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../util";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Forgot.css"
 import axios from "axios";
 const Login = () => {
@@ -31,17 +31,14 @@ const Login = () => {
             inputsRef.current[index + 1].focus();
         }
     };
-
     const handleOtpKeyDown = (e, index) => {
         if (e.key === "Backspace" && !otp[index] && index > 0) {
             inputsRef.current[index - 1].focus();
         }
     };
-
     // On submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!validation()) return;
 
         try {
@@ -62,7 +59,6 @@ const Login = () => {
                     handleError("Please enter to complete OTP");
                     return;
                 }
-
                 const res = await axios.post(`${API_BASE_URL}/forgot/verify-otp`, {
                     email,
                     otp: otpString,
@@ -94,11 +90,9 @@ const Login = () => {
             )
 
         } catch (err) {
-            handleError(err.response?.data?.message || "Something went wrong");
+            handleError(err.response?.data?.message || "Server not responding? Please try again later.");
         }
     };
-
-
     const validation = () => {
         // Email
 
@@ -113,9 +107,6 @@ const Login = () => {
                 return false;
             }
         }
-
-
-
         if (!otpSendMode) {
             if (changePasswordMode) {
                 if (password.length < 8) {
@@ -136,14 +127,8 @@ const Login = () => {
             }
         }
 
-        return true; // ✅ VERY IMPORTANT
+        return true; 
     };
-
-
-
-
-
-
     return (
 
         <div className="min-h-screen flex items-center justify-center bg-linear-gradient(135deg, #2e7d32 0%, #1b5e20 50%, #388e3c 100%)">

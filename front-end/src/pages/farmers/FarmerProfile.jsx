@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 // import { button } from "./ui/button";
 import FarmerHeader from "./FarmerHeader"
 import {
-
-
-
   Save,
 
   Edit,
@@ -15,9 +12,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { handleSuccess, handleError } from "../../util";
 export default function FarmerProfile() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  
   const [email, setEmail] = useState("");
   const token = localStorage.getItem("token");
+  const [isLoading, setIsLoading] = useState(true); 
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
@@ -56,7 +53,7 @@ export default function FarmerProfile() {
 
     if (result.success) {
       setProfile(result.profile);
-      toast.success("Profile image updated");
+      handleSuccess("Profile image updated");
     }
   };
 
@@ -81,7 +78,10 @@ export default function FarmerProfile() {
       }
     } catch (err) {
       // console.log(err)
-      toast.error("Error fetching profile");
+     handleError("Server not responding. Please try again later.");
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +89,13 @@ export default function FarmerProfile() {
     fetchProfile();
   }, []);
 
-
+if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="spinner2"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-container">

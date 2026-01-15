@@ -77,7 +77,7 @@ export default function FarmerDashboard() {
 
       } catch (err) {
         // console.error(err);
-        toast.handleError("Failed to load sales data");
+        handleError("Server not responding. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -127,12 +127,6 @@ export default function FarmerDashboard() {
   useEffect(() => {
     fetchActivities();
   }, [API_BASE_URL, token])
-  // const pieData= [
-  //   { name: "Vegetables", value: pieData["vegetables"], icon: <Leaf /> },
-  //   { name: "Fruits", value:pieData["fruits"], icon: <Apple /> },
-  //   { name: "Grains", value: 20, icon: <Wheat /> },
-  //   { name: "Orders", value: 10, icon: <ShoppingCart /> },
-  // ];
   const ICON_MAP = {
 
     Fruits: <Apple />,
@@ -216,8 +210,6 @@ export default function FarmerDashboard() {
                 </ResponsiveContainer>
               </>
             )}
-
-
           </div>
 
           {/* Pie Chart */}

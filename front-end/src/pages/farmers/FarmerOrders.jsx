@@ -5,43 +5,21 @@ import { ToastContainer, toast } from "react-toastify";
 import "./css/FarmerOrders.css"
 // import api from "../api"; // axios instance
 import {
-
-
     Package,
     Clock,
     CheckCircle,
     XCircle,
     TrendingUp,
-    AlertCircle,
     Search,
-    Filter,
     Eye,
     Grid,
     List,
     Check,
-    Save,
-    X,
-    Tag,
-    IndianRupee,
-    Edit,
-    Trash2,
-    ImageIcon,
     User,
-    Users,
-    Home,
-    BarChart3,
-    ShoppingBag,
-    Shield,
     Phone,
-    Plus,
     Mail,
     MapPin,
     Calendar,
-    DollarSign,
-    Leaf,
-    LogOut,
-    UserCircle,
-    Settings
 } from "lucide-react";
 const FarmerOrders = () => {
 

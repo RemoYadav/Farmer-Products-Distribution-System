@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useProfile } from "../../context/ProfileContext.jsx"
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -17,10 +16,9 @@ import {
   
   Settings
 } from "lucide-react";
-import "./Header.css"
+import "./css/CustomerHeader.css"
 import { ToastContainer, toast } from "react-toastify";
 const Header = () => {
-
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -35,11 +33,6 @@ const Header = () => {
 
   const token = localStorage.getItem("token");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-
-  const goToAbout = () => {
-
-  }
   const activeNavigation = () => {
     if (location.pathname.includes("/page/customer/dashboard")) return "dashboard";
     if (location.pathname.includes("/page/marcket")) return "marcket";
@@ -143,14 +136,6 @@ const Header = () => {
             >
               <ShoppingBag className="tab-icon" />
               Orders
-            </button>
-
-            <button
-              className={`tab-btn ${activeNavigation() === "about" ? "active" : ""}`}
-              onClick={() => navigate("about")}
-            >
-              <Shield className="tab-icon" />
-              About
             </button>
           </div>
           <div className="header-right">
