@@ -10,7 +10,7 @@ import { AuthProvider } from "./context/AuthContext"
 import { NotificationProvider } from "./context/NotificationContext";
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode type="module">
+  <StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <NotificationProvider>
