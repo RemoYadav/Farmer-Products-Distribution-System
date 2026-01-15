@@ -6,7 +6,7 @@ import PrivateRoute from "./ProtectedRoute";
 import Login from "./pages/Login";
 import Forgot from "./pages/Forgot";
 
-import { AdminDashboard } from "./component/AdminDashboard";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
 
 import FarmerDashboard from "./pages/farmers/FarmerDashboard";
 import Profile from "./pages/farmers/Profile";
