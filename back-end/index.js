@@ -37,7 +37,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/profiles", express.static(path.join(__dirname, "profiles")));
 app.use('/api/cart', require('./Controllers/cart'));
 // app.use("/api/farmer", require("./Routes/FarmerRoutes"));
-app.use("/admin", AdminRoutes);
+app.use("/api/admin", AdminRoutes);
 app.use("/api/activity",require("./Routes/ActivityRoutes"))
 app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -55,6 +55,7 @@ export function AdminDashboard() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterUserType, setFilterUserType] = useState("all");
   const [email, setEmail] = useState("");
+   const token = localStorage.getItem("token");
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   }, []);
@@ -88,8 +89,7 @@ export function AdminDashboard() {
               imagePreview: p.image ? `${API_BASE_URL}/${p.image}` : null// base64 or image path
             }))
           );
-          isLoading(false);
-          // Optional cache
+         
 
         } else {
           console.error(data.message);
@@ -101,7 +101,7 @@ export function AdminDashboard() {
     };
 
     fetchProducts();
-  }, []);
+  }, [API_BASE_URL, token]);
 
 
   // LoginActivity
@@ -115,7 +115,7 @@ export function AdminDashboard() {
     })
       .then(res => res.json())
       .then(data => setSecurityLogs(data));
-  }, []);
+  }, [API_BASE_URL, token]);
 
   const [stats, setStats] = useState(null);
 
@@ -132,7 +132,7 @@ export function AdminDashboard() {
       .then(data => setStats(data))
       .catch(err => console.error("Stats error:", err));
 
-  }, []);
+  }, [token, API_BASE_URL]);
   const saveUsers = (updatedUsers) => {
     setUsers(updatedUsers);
   };

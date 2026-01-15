@@ -129,19 +129,6 @@ export default function Market(props) {
 
     // };
     const handleOrderClick = (product) => {
-        //   const customer = JSON.parse(localStorage.getItem("user"));
-
-        //   const farmer = farmers.find(f => f.id === product.farmerId);
-
-        //   const orderPayload = {
-        //     product: {
-        //       id: product.id,
-        //     },
-        //     farmer: {
-        //       id: farmer.id,
-        //     }
-        //   };
-
         navigate(`/page/place-order/${product.id}`);
     };
 
@@ -317,7 +304,7 @@ export default function Market(props) {
                                                 <h4>{product.name}</h4>
                                                 <p className="product-farmer">{product.category}</p>
                                                 <div className="product-price-row">
-                                                    <span className="product-price">${product.price.toFixed(2)}</span>
+                                                    <span className="product-price">रु-{product.price.toFixed(2)}</span>
                                                     <span className="product-unit">per {product.unit}</span>
                                                 </div>
                                                 <div className="product-stock">
@@ -423,7 +410,7 @@ export default function Market(props) {
                                                 <h4>{product.name}</h4>
                                                 <span className="product-category">{(product.category)}</span>
                                                 <div className="product-price-row">
-                                                    <span className="product-price">${product.price.toFixed(2)}</span>
+                                                    <span className="product-price">रु-{product.price.toFixed(2)}</span>
                                                     <span className="product-unit">per {product.unit}</span>
                                                 </div>
                                                 <div className="product-stock">

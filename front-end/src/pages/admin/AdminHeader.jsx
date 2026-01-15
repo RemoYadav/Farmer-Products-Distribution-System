@@ -11,7 +11,7 @@ import {
 
     Home,
     BarChart3,
-
+    Package,
     Shield,
 
     Settings
@@ -22,8 +22,8 @@ const Header = () => {
     const location = useLocation();
 
     const navigate = useNavigate();
-    const { logOut } = useAuth()
-    // const { fetchCustomerProfile, userName, profileImage } = useProfile();
+    const { logOut } = useAuth();
+
 
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [email, setEmail] = useState("")
@@ -36,10 +36,10 @@ const Header = () => {
 
 
     const activeNavigation = () => {
-        if (location.pathname.includes("/page/admin/dashboard")) return "dashboard";
-        if (location.pathname.includes("/page/marcket")) return "marcket";
-        if (location.pathname.includes("/page/admin/orders")) return "orders";
-        if (location.pathname.includes("/page/admin/profile")) return "profile";
+        if (location.pathname.includes("/admin/dashboard")) return "dashboard";
+        if (location.pathname.includes("/marcket")) return "marcket";
+        if (location.pathname.includes("/admin/orders")) return "orders";
+        if (location.pathname.includes("/admin/profile")) return "profile";
         if (location.pathname.includes("/admin/about")) return "about";
         return "";
     };
@@ -83,7 +83,7 @@ const Header = () => {
             }
         };
 
-        fetchProfile();
+        // fetchProfile();
     }, [token, API_BASE_URL]);
 
     return (
@@ -120,7 +120,7 @@ const Header = () => {
                                         Settings</p>
                                     <button
                                         className="menu-item btn-logout"
-                                        onClick={setShowUserMenu(!showUserMenu)}
+                                        onClick={LogOut}
                                     >
                                         <LogOut className="icon-sm" />
                                         Logout
@@ -136,43 +136,43 @@ const Header = () => {
                 {/* Tab Navigation */}
                 <div className="admin-tabs">
                     <button
-                        className={`tab-btn ${activeTab === "home" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/dashboard")}
+                        className={`tab-btn ${activeNavigation === "home" ? "active" : ""}`}
+                        onClick={() => navigate("/admin/dashboard")}
                     >
                         <Home className="tab-icon" />
                         Home
                     </button>
                     <button
                         className={`tab-btn ${activeNavigation === "overview" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/overview")}
+                        onClick={() => navigate("/admin/overview")}
                     >
                         <BarChart3 className="tab-icon" />
                         Overview
                     </button>
                     <button
                         className={`tab-btn ${activeNavigation === "users" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/users")}
+                        onClick={() => navigate("/admin/users")}
                     >
                         <Users className="tab-icon" />
                         Users
                     </button>
-                    <button
+                    {/* <button
                         className={`tab-btn ${activeNavigation === "orders" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/orders")}
+                        onClick={() => navigate("/admin/orders")}
                     >
                         <ShoppingBag className="tab-icon" />
                         Orders
-                    </button>
+                    </button> */}
                     <button
                         className={`tab-btn ${activeNavigation === "products" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/products")}
+                        onClick={() => navigate("/admin/products")}
                     >
                         <Package className="tab-icon" />
                         Products
                     </button>
                     <button
                         className={`tab-btn ${activeNavigation === "security" ? "active" : ""}`}
-                        onClick={() => navigate("/page/admin/security")}
+                        onClick={() => navigate("/admin/security")}
                     >
                         <Shield className="tab-icon" />
                         Security

@@ -434,7 +434,7 @@ export default function PlaceOrders() {
                         <option value="">Select product</option>
                         {productsAvailable.map(p => (
                           <option key={p._id} value={p._id}>
-                            {p.productName} - ${p.price}/{p.unit}
+                            {p.productName} - रु-{p.price}/{p.unit}
                           </option>
                         ))}
                       </select>
@@ -504,8 +504,8 @@ export default function PlaceOrders() {
                   <div className="relative mt-1">
                     <label>Estimated Total</label>
                     <div className="total-display">
-                      Nrs-
-                      <span className="total-amount">${calculateTotal()}</span>
+                      
+                      <span className="total-amount">रु-{calculateTotal()}</span>
                     </div>
                   </div>
                 </div>

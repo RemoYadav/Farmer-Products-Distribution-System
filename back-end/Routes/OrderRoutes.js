@@ -9,7 +9,7 @@ router.post("/",authMiddleware, createOrder);
 // router.delete("/:id",authMiddleware, productController.deleteProduct);
 router.get("/", authMiddleware , getOrders);
 router.get("/allOrders", authMiddleware , getcustomerOrders);
-router.get("/admin", authMiddleware , getAdminOrders);
+router.get("/admin/:id", authMiddleware , getAdminOrders);
 // DELETE or PATCH request to cancel
 router.patch("/cancel/:orderNumber", cancelOrderByProductId);
 router.patch("/approved/:orderNumber",authMiddleware, updateOrderStatus);

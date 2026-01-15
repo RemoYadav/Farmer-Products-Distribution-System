@@ -7,7 +7,8 @@ import Login from "./pages/Login";
 import Forgot from "./pages/Forgot";
 
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
-
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminOrders from "./pages/admin/AdminOrders";
 import FarmerDashboard from "./pages/farmers/FarmerDashboard";
 import Profile from "./pages/farmers/Profile";
 import Products from "./pages/farmers/Products";
@@ -23,6 +24,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  
   return (
     <div className="grid w-full min-h-screen">
       <Referesh
@@ -37,7 +39,8 @@ const App = () => {
       ) : (
       <Routes>
         {/* PUBLIC */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login   setIsAuthenticated={setIsAuthenticated}
+        setRole={setRole}/>} />
         <Route path="/forgot" element={<Forgot />} />
 
         {/* 🔐 CUSTOMER */}
@@ -86,6 +89,8 @@ const App = () => {
           }
         >
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/orders/:id" element={<AdminOrders />} />
         </Route>
       </Routes>
       )}

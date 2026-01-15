@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../util";
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setIsAuthenticated, setRole }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [user, setUser] = useState("");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -39,14 +39,12 @@ const Login = () => {
   // On submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Submitted");
-    //  try {
     if (validation()) {
       if (isLoginMode) {
 
         try {
           const payload = {
-            email: formData.email,
+            email: formData.email.trim(),
             password: formData.password
           };
 
@@ -70,7 +68,8 @@ const Login = () => {
             localStorage.setItem("token", result.jwtToken);
             localStorage.setItem("role", result.role);
             localStorage.setItem("email", result.email);
-
+            setIsAuthenticated(true);
+            setRole(result.role);
             setTimeout(() => {
               if (result.role === "admin") navigate("/admin/dashboard");
               else if (result.role === "farmer") navigate("/farmer/dashboard");
@@ -271,8 +270,8 @@ const Login = () => {
           {/* Highlight slider */}
           <div
             className={`absolute top-0 h-full w-1/2 rounded-full transition-all duration-300 ${isLoginMode
-                ? "left-0 bg-green-500"
-                : "left-1/2 bg-green-500"
+              ? "left-0 bg-green-500"
+              : "left-1/2 bg-green-500"
               }`}
           ></div>
         </div>

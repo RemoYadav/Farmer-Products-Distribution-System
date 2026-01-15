@@ -78,7 +78,7 @@ const login = async (req, res) => {
         userAgent: req.headers["user-agent"],
         details: "User not found"
       });
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res.status(401).json({ success: false, message: "Users are not signin the system" });
     }
 
     const isPassEqual = await bcrypt.compare(password, user.password);
@@ -96,7 +96,7 @@ const login = async (req, res) => {
         details: "Wrong password"
       });
 
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: errorMsg });
     }
     await LoginActivity.create({
       logId,

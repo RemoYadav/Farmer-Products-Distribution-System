@@ -24,7 +24,7 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Required fields missing" });
     }
 
-    // ✅ Get product with farmer
+    // Get product with farmer
     const productData = await Product.findById(product);
 
     if (!productData) {
@@ -35,7 +35,7 @@ exports.createOrder = async (req, res) => {
     const productPrice = Number(price);
     const orderNumber = await generateOrderNumber();
 
-    // ✅ Create order
+    // Create order
     const newOrder = await Order.create({
       orderNumber,
       customerId: userId,
@@ -139,9 +139,11 @@ exports.getcustomerOrders = async (req, res) => {
   }
 };
 
+// Controller to get all orders for a specific farmer
 exports.getAdminOrders = async (req, res) => {
+  const { id } = req.params; 
   try {
-    const orders = await Order.find()
+    const orders = await Order.find({ farmerId: id })
       .populate({
         path: "productId",
         select: "productName farmerId price",
@@ -150,8 +152,7 @@ exports.getAdminOrders = async (req, res) => {
           select: "fullName farmName email phone"
         }
       })
-      .sort({ createdAt: -1 });
-
+      .sort({ createdAt: -1 }); // newest first
     const formattedOrders = orders.map(order => ({
       _id: order._id,
       orderNumber: order.orderNumber,
@@ -165,13 +166,15 @@ exports.getAdminOrders = async (req, res) => {
       productName: order.productId?.productName || "Unknown",
       price: order.productId?.price || 0,
 
-      farmer: {
-        id: order.productId?.farmerId?._id,
-        fullName: order.productId?.farmerId?.fullName,
-        farmName: order.productId?.farmerId?.farmName,
-        email: order.productId?.farmerId?.email,
-        phone: order.productId?.farmerId?.phone
-      }
+      farmer: order.productId?.farmerId
+        ? {
+            id: order.productId.farmerId._id,
+            fullName: order.productId.farmerId.fullName,
+            farmName: order.productId.farmerId.farmName,
+            email: order.productId.farmerId.email,
+            phone: order.productId.farmerId.phone
+          }
+        : null
     }));
 
     res.status(200).json(formattedOrders);
@@ -180,6 +183,7 @@ exports.getAdminOrders = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch admin orders" });
   }
 };
+
 
 // exports.updateOrderStatus = async (req, res) => {
   const mongoose = require("mongoose");

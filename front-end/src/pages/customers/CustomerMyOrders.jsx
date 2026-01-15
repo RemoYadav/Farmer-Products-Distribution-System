@@ -364,7 +364,7 @@ if (isLoading) {
                           <Package className="product-icon" />
                           <div>
                             <h3>{order.productName}</h3>
-                            <p>{order.quantity} {order.unit}s × ${order.price}/{order.unit}</p>
+                            <p>{order.quantity} {order.unit}s × रु-{order.price}/{order.unit}</p>
                           </div>
                         </div>
 
@@ -386,10 +386,10 @@ if (isLoading) {
                           </div>
 
                           <div className="info-item">
-                            <DollarSign className="info-icon" />
+                            
                             <div>
                               <span className="info-label">Total</span>
-                              <span className="info-value price">${order.totalPrice}</span>
+                              <span className="info-value price">रु-{order.totalPrice}</span>
                             </div>
                           </div>
                         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../components/header"
+import Header from "./CustomerHeader.jsx";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { toast, ToastContainer } from "react-toastify";
 import {
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { handleSuccess, handleError } from "../../util";
 import { useAuth } from "../../context/AuthContext.jsx";
-import Header from "../../components/Header.jsx"
+import Header from "./CustomerHeader.jsx";
 // import CustomerProfile from "../component/CustomerProfile"
 import {
     ShoppingBag,

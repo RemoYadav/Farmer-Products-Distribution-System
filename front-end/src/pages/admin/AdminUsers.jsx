@@ -3,19 +3,12 @@ import {
     Search,
     Filter,
 
-    Download,
-    Mail,
-    Phone,
-    Home,
-    MapPin,
-    Calendar,
-    Trash2,
-    Edit,
-    LogOut,
+    Eye,
 
 } from "lucide-react";
-const API_BASE = "http://localhost:8080/admin";
-
+import "./AdminDashboard.css";
+import AdminHeader from "./AdminHeader.jsx";
+import { useNavigate } from "react-router-dom";
 const AdminUsers = () => {
     const [customers, setCustomers] = useState([]);
     const [farmers, setFarmers] = useState([]);
@@ -23,30 +16,36 @@ const AdminUsers = () => {
     const [filterUserType, setFilterUserType] = useState("all");
     const [filterStatus, setFilterStatus] = useState("all");
     const [activeView, setActiveView] = useState("customers");
-
+    const [isLoading, setIsLoading] = useState(true);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const navigate = useNavigate();
     // Fetch customers
     const loadCustomers = async () => {
         try {
-            const res = await fetch(`${API_BASE}/customers`);
+            const res = await fetch(`${API_BASE_URL}/api/admin/customers`);
             const data = await res.json();
 
             setCustomers(Array.isArray(data) ? data : data.customers || []);
         } catch (err) {
             console.error("Error loading customers", err);
             setCustomers([]);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     // Fetch farmers
     const loadFarmers = async () => {
         try {
-            const res = await fetch(`${API_BASE}/farmers`);
+            const res = await fetch(`${API_BASE_URL}/api/admin/farmers`);
             const data = await res.json();
 
             setFarmers(Array.isArray(data) ? data : data.farmers || []);
         } catch (err) {
             console.error("Error loading farmers", err);
             setFarmers([]);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -58,28 +57,25 @@ const AdminUsers = () => {
     // Delete customer
     const deleteCustomer = async (id) => {
         if (window.confirm("Are you sure you want to delete this customer?")) {
-            await fetch(`${API_BASE}/customers/${id}`, { method: "DELETE" });
+            await fetch(`${API_BASE_URL}/customers/${id}`, { method: "DELETE" });
             loadCustomers();
         }
     };
 
     // Toggle customer status
     const toggleCustomerStatus = async (id) => {
-        await fetch(`${API_BASE}/customers/${id}/status`, { method: "PATCH" });
+        await fetch(`${API_BASE_URL}/customers/${id}/status`, { method: "PATCH" });
         loadCustomers();
     };
 
     // Delete farmer
-    const deleteFarmer = async (id) => {
-        if (window.confirm("Are you sure you want to delete this farmer?")) {
-            await fetch(`${API_BASE}/farmers/${id}`, { method: "DELETE" });
-            loadFarmers();
-        }
+    const getOrder = async (id) => {
+        navigate(`/admin/orders/${id}`);
     };
 
     // Toggle farmer status
     const toggleFarmerStatus = async (id) => {
-        await fetch(`${API_BASE}/farmers/${id}/status`, { method: "PATCH" });
+        await fetch(`${API_BASE_URL}/farmers/${id}/status`, { method: "PATCH" });
         loadFarmers();
     };
     const filterUsers = (users) => {
@@ -94,16 +90,19 @@ const AdminUsers = () => {
             return matchesSearch && matchesStatus;
         });
     };
-
+    if (isLoading) {
+        return (
+            <div className="loader-overlay">
+                <div className="spinner2"></div>
+            </div>
+        );
+    }
 
     return (
 
         <div className="users-section">
-            <div className="section-header">
 
-
-            </div>
-
+            <AdminHeader />
             {/* Filters */}
             <div className="filters-section">
                 <div className="search-box">
@@ -183,20 +182,22 @@ const AdminUsers = () => {
                                             <td>{c.location || "-"}</td>
                                             <td>${(c.totalSpend || 0).toFixed(2)}</td>
                                             <td>{c.status}</td>
-                                            <td className="">
+                                            <td className="flex gap-2">
                                                 <div className="action-buttons flex">
                                                     <button
-                                                        style={{ backgroundColor: "#e74c3c", color: "white", marginRight: "5px" }}
-                                                        onClick={() => deleteCustomer(c._id)}
+                                                        style={{ backgroundColor: "blue", color: "white", marginRight: "5px" }}
+                                                        onClick={() => (c._id)}
+                                                        className="btn-action"
                                                     >
-                                                        Delete
+                                                        <Eye className="icon-sm" /> View
                                                     </button>
-                                                    <button
+                                                    {/* <button
                                                         style={{ backgroundColor: "#3498db", color: "white" }}
                                                         onClick={() => toggleCustomerStatus(c._id)}
+                                                        className="btn-action"
                                                     >
                                                         {c.status === "active" ? "Suspend" : "Activate"}
-                                                    </button>
+                                                    </button> */}
                                                 </div>
                                             </td>
                                         </tr>
@@ -236,17 +237,13 @@ const AdminUsers = () => {
                                             <td>
                                                 <div className="action-buttons">
                                                     <button
-                                                        style={{ backgroundColor: "#e74c3c", color: "white", marginRight: "5px" }}
-                                                        onClick={() => deleteFarmer(f._id)}
+                                                        style={{ backgroundColor: "blue", color: "white", marginRight: "5px" }}
+                                                        onClick={() => getOrder(f.userId)}
+                                                        className="btn-action"
                                                     >
-                                                        Delete
+                                                        <Eye className="icon-sm" /> View
                                                     </button>
-                                                    <button
-                                                        style={{ backgroundColor: "#3498db", color: "white" }}
-                                                        onClick={() => toggleFarmerStatus(f._id)}
-                                                    >
-                                                        {f.status === "active" ? "Suspend" : "Activate"}
-                                                    </button>
+
                                                 </div>
                                             </td>
                                         </tr>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import AdminHeader from "./AdminHeader.jsx";
+import { useParams } from "react-router-dom";
 // import api from "../api"; // axios instance
 import {
 
@@ -43,13 +44,8 @@ import {
     Settings
 } from "lucide-react";
 const AdminOrders = () => {
-   
-   
-    
-
-   
-
-
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+ const { id } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [view, setView] = useState("tableView");
@@ -60,19 +56,18 @@ const AdminOrders = () => {
     const [activeTab, setActiveTab] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedRequest, setSelectedRequest] = useState(null);
-    const [btnColor, setBtnColor] = useState("viewed");
-    const [previewImage, setPreviewImage] = useState("");
-
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const res = await fetch("http://localhost:8080/api/orders/admin", {
+                const res = await fetch(`${API_BASE_URL}/api/orders/admin/${id}`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
                     }
                 });
                 const data = await res.json();
+                console.log(data);
                 if (Array.isArray(data)) {
                     setRequests(data);
 
@@ -83,13 +78,15 @@ const AdminOrders = () => {
                 }
             } catch (error) {
                 console.error("Error fetching orders", error);
+            }finally {
+                setIsLoading(false);
             }
         };
         fetchOrders();
     }, []);
     const updateStatus = async (orderNumber, status, rejectedReason = "") => {
         const res = await fetch(
-            `http://localhost:8080/api/orders/approved/${orderNumber}`,
+            `${API_BASE_URL}/api/orders/approved/${orderNumber}`,
             {
                 method: "PATCH",
                 headers: {
@@ -176,9 +173,16 @@ const AdminOrders = () => {
             default: return null;
         }
     };
+   if (isLoading) {
+    return (
+        <div className="loader-overlay">
+            <div className="spinner2"></div>
+        </div>
+    );
+}
     return (
         <div>
-            
+
             <div className="" >
                 {/* Stats Cards */}
                 <div className="stats-grid mt-5  ml-5 mr-5 mb-1 ">
@@ -283,7 +287,7 @@ const AdminOrders = () => {
                     <h2 className="text-xl font-bold mb-4">Customer Orders</h2>
 
                     <table className="w-full border">
-                        <thead className="bg-green-600 text-white">
+                        <thead className="bg-blue-400 text-white">
                             <tr>
                                 <th>S.N</th>
                                 <th className="p-2">Customer</th>
@@ -308,7 +312,7 @@ const AdminOrders = () => {
                                     <td>{order.productName}</td>
                                     <td>{order.price}</td>
                                     <td>{order.quantity}</td>
-                                    <td>₹{order.totalPrice}</td>
+                                    <td>रु-{order.totalPrice}</td>
                                     <td className="capitalize font-semibold">
                                         {order.status}
                                     </td>
