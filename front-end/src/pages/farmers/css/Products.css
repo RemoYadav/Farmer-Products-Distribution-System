@@ -334,9 +334,6 @@ display: flex;
   justify-items: center;
   align-items: center;
 }
-.form-group{
-  
-}
 
 .input-with-prefix input {
   padding-left: 3rem;
@@ -730,7 +727,7 @@ display: flex;
 }
  .searchInput { 
   
-  padding: 0.75rem 2rem 0.75rem 1rem;
+  /* padding: 0.75rem 2rem 0.75rem 1rem; */
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -749,8 +746,8 @@ display: flex;
   margin-left: 10px;
 }
 .product-search-icon {
-  position: absolute;
-  left: 1rem;
+  /* position: absolute; */
+
   width: 1.25rem;
   height: 1.25rem;
   color: #999;

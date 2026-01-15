@@ -3,7 +3,6 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import App2 from './App2.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ProfileProvider } from "./context/ProfileContext";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FarmerHeader from "./FarmerHeader"
-
+import "./css/About.css"
 import {
 
 

@@ -140,7 +140,7 @@ const FarmerOrders = () => {
 
         pending: requests.filter(r => r?.status === "pending").length,
         approved: requests.filter(r => r?.status === "approved").length,
-        completed: requests.filter(r => r?.status === "delivered").length,
+        delivered: requests.filter(r => r?.status === "delivered").length,
         rejected: requests.filter(r => r?.status === "rejected").length,
         cancelled: requests.filter(r => r?.status === "cancelled").length,
 
@@ -214,7 +214,7 @@ const FarmerOrders = () => {
                 {/* Stats Cards */}
                 <div className="stats-grid mt-5  ml-5 mr-5 mb-1 ">
                     <div className="stat-card stat-total ">
-                        <div className="stat-icon ">
+                        <div className="fm-stat-icon ">
                             <Package className="icon-lg" />
                         </div>
                         <div className="stat-content">
@@ -224,7 +224,7 @@ const FarmerOrders = () => {
                     </div>
 
                     <div className="stat-card stat-pending">
-                        <div className="stat-icon">
+                        <div className="fm-stat-icon">
                             <Clock className="icon-lg" />
                         </div>
                         <div className="stat-content">
@@ -234,7 +234,7 @@ const FarmerOrders = () => {
                     </div>
 
                     <div className="stat-card stat-approved">
-                        <div className="stat-icon">
+                        <div className="fm-stat-icon">
                             <CheckCircle className="icon-lg" />
                         </div>
                         <div className="stat-content">
@@ -244,7 +244,7 @@ const FarmerOrders = () => {
                     </div>
 
                     <div className="stat-card stat-revenue">
-                        <div className="stat-icon">
+                        <div className="fm-stat-icon">
                             <TrendingUp className="icon-lg" />
                         </div>
                         <div className="stat-content">
@@ -301,10 +301,10 @@ const FarmerOrders = () => {
                         Approved ({stats.approved})
                     </button>
                     <button
-                        className={`tab ${activeTab === "completed" ? "tab-active" : ""}`}
-                        onClick={() => setActiveTab("completed")}
+                        className={`tab ${activeTab === "delivered" ? "tab-active" : ""}`}
+                        onClick={() => setActiveTab("delivered")}
                     >
-                        Completed ({stats.completed})
+                        Completed ({stats.delivered})
                     </button>
                 </div>
             </div>
