@@ -1,0 +1,106 @@
+const Customer = require("../Models/Customer");
+const User = require("../Models/User");
+
+exports.saveProfile = async (req, res) => {
+  try {
+    const { email, userId } = req.user;
+    const { fullName, phone, location, address, city, state, zipCode } = req.body;
+
+    const imagePath = req.file ? req.file.path : null;
+
+    let customer = await Customer.findOne({ email });
+
+    if (!customer) {
+      customer = new Customer({
+        userId,
+        email,
+        fullName,
+        phone,
+        location,
+        address,
+        city,
+        state,
+        zipCode,
+        image: imagePath || null,
+      });
+
+      await customer.save();
+
+      return res.status(201).json({
+        success: true,
+        message: "Profile created successfully",
+        profile: customer,
+      });
+    }
+
+    const isUnchanged =
+      customer.fullName === fullName &&
+      customer.phone === phone &&
+      customer.location === location &&
+      customer.address === address &&
+      customer.city === city &&
+      customer.state === state &&
+      customer.zipCode === zipCode &&
+      (!imagePath || customer.image === imagePath);
+
+    if (isUnchanged) {
+      return res.status(200).json({
+        success: true,
+        message: "Profile already up to date",
+        profile: customer,
+      });
+    }
+
+    customer.fullName = fullName;
+    customer.phone = phone;
+    customer.location = location;
+    customer.address = address;
+    customer.city = city;
+    customer.state = state;
+    customer.zipCode = zipCode;
+
+    if (imagePath) {
+      customer.image = imagePath;
+    }
+
+    await customer.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      profile: customer,
+    });
+
+  } catch (error) {
+    console.error("Save Profile Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while saving profile",
+    });
+  }
+};
+
+
+exports.getProfile = async (req, res) => {
+  try {
+    const { email } = req.user;
+
+    const customer = await Customer.findOne({ email });
+
+    return res.status(200).json({
+      success: true,
+      profile: customer || null,
+      // profile: {
+      //   fullName: customer.fullName,
+      //   image: customer.image,
+      // },
+      profileCompleted: !!customer,
+    });
+  } catch (error) {
+    console.error("Get Profile Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching profile",
+    });
+  }
+};
