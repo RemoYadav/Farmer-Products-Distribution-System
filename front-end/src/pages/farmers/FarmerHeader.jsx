@@ -199,11 +199,11 @@ const FarmerHeader = (user) => {
             </div>
           </div>
         </div>
-         <UserProfilePanel
+         {/* <UserProfilePanel
         user={user}
         open={openProfile}
         onClose={() => setOpenProfile(false)}
-      />
+      /> */}
         <NotificationDrawer />
       </header>
     </div>
