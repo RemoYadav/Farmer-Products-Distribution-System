@@ -19,7 +19,7 @@ import CustomerMyOrders from "./pages/customers/CustomerMyOrders";
 import PlaceOrders from "./pages/customers/PlaceOrders";
 import CustomerProfile from "./pages/customers/Profile";
 import Market from "./pages/Market";
-
+import { Navigate } from "react-router-dom";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
