@@ -286,7 +286,7 @@ const Login = ({ setIsAuthenticated, setRole }) => {
           >
             <option value="customer">Customer</option>
             <option value="farmer">Farmer</option>
-            <option value="admin">Admin</option>
+            
           </select>
         )}
 
