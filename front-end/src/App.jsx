@@ -36,11 +36,9 @@ const App = () => {
         setLoading={setLoading}
         loading={loading}
       />
+
       <Routes>
-<<<<<<< HEAD
        
-=======
->>>>>>> 27d3fc07f3748dae099a45a3a18c0276b9b03095
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated}
           setRole={setRole} />} />
         <Route path="/forgot" element={<Forgot />} />
@@ -80,7 +78,7 @@ const App = () => {
           <Route path="/farmer/about" element={<About />} />
         </Route>
 
-        {/* ADMIN */}
+        {/* 🛠 ADMIN */}
         <Route
           element={
             <PrivateRoute
