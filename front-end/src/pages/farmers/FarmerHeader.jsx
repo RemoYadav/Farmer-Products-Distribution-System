@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {handleSuccess,handleError} from "../../util"
 import { useNotifications } from "../../context/NotificationContext";
 import NotificationDrawer from "../../components/NotificationDrawer";
+import Profile from "./Profile";
 import {
   User,
   LogOut,
@@ -15,14 +16,16 @@ import {
   Settings
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
-const FarmerHeader = () => {
+const FarmerHeader = (user) => {
 
   const location = useLocation();
 
   const navigate = useNavigate();
   const { logOut } = useAuth()
   const { count, open, setOpen, fetchNotifications } = useNotifications();
+  const [openProfile, setOpenProfile] = useState(false);
   const [animate, setAnimate] = useState(false)
+  const toggleProfile = () => setOpenProfile(prev => !prev);
   const toggle = () => {
     setOpen(!open);
     if (!open) fetchNotifications();
@@ -177,7 +180,7 @@ const FarmerHeader = () => {
                 </div>
                 {showUserMenu && (
                   <div className="menu-content">
-                    <p className="menu-item btn-profile" >
+                    <p className="menu-item btn-profile" onClick={toggleProfile}>
                       <User className="icon-sm" />
                       Profile</p>
                     <p className="menu-item btn-settings">
@@ -196,6 +199,11 @@ const FarmerHeader = () => {
             </div>
           </div>
         </div>
+         <UserProfilePanel
+        user={user}
+        open={openProfile}
+        onClose={() => setOpenProfile(false)}
+      />
         <NotificationDrawer />
       </header>
     </div>

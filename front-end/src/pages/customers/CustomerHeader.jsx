@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotifications } from "../../context/NotificationContext";
+import NotificationDrawer from "../../components/NotificationDrawer";
 import {
   ShoppingBag,
   User,
@@ -15,7 +16,6 @@ import "./css/CustomerHeader.css"
 import { ToastContainer, toast } from "react-toastify";
 const Header = () => {
   const location = useLocation();
-
   const navigate = useNavigate();
   const { logOut } = useAuth()
   const { count, open, setOpen, fetchNotifications } = useNotifications();
@@ -191,6 +191,7 @@ const Header = () => {
             </div>
           </div>
         </div>
+         <NotificationDrawer />
       </header>
     </div>
   )

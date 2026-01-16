@@ -15,14 +15,22 @@ exports.getNotificationCount = async (req, res) => {
   }
 };
 exports.getNotifications = async (req, res) => {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.id; // logged-in user's id
 
-  const notifications = await Notification.find({ userId })
-    .sort({ createdAt: -1 })
-    .limit(10);
+    // Get last 10 notifications for this user
+    const notifications = await Notification.find({ receiverId: userId })
+      .populate("senderId", "name role") // optional: populate sender's name & role
+      .sort({ createdAt: -1 })
+      .limit(10);
 
-  res.json({ success: true, notifications });
+    res.json({ success: true, notifications });
+  } catch (err) {
+    console.error("Error fetching notifications:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
 };
+
 exports.markAsRead = async (req, res) => {
   const userId = req.user.id;
 

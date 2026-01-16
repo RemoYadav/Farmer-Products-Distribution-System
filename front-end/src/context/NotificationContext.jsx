@@ -50,7 +50,7 @@ export const NotificationProvider = ({ children }) => {
     fetchCount();
     const interval = setInterval(fetchCount, 5000); // auto refresh
     return () => clearInterval(interval);
-  }, []);
+  }, [token, API_BASE_URL]);
 
   return (
     <NotificationContext.Provider

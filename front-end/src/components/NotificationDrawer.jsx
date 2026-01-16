@@ -20,7 +20,7 @@ const NotificationDrawer = () => {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h3 className="text-lg font-semibold">Notifications</h3>
+          <h3 className="text-lg font-semibold mr-2">Notifications</h3>
           <button
             onClick={markAllRead}
             className="text-sm text-green-600 hover:underline"

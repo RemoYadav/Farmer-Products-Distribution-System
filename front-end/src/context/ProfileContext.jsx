@@ -18,7 +18,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     : "";
 
   const imageUrl = imagePath
-    ? `http://localhost:8080${imagePath}`
+    ? `${API_BASE_URL}${imagePath}`
     : "";
 
   setProfile(profileData);
@@ -35,7 +35,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   // 🌾 Farmer profile
   const fetchFarmerProfile = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/farmer/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/farmer/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -43,7 +43,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
       if (result.success && result.profile) {
         setRole("farmer");
-        applyProfile(result.profile, "http://localhost:8080");
+        applyProfile(result.profile, API_BASE_URL);
       }
     } catch (err) {
       console.error("Farmer profile fetch failed", err);
@@ -53,7 +53,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   // 👤 Customer profile
   const fetchCustomerProfile = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/customer/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/customer/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -61,7 +61,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
       if (result.success && result.profile) {
         setRole("customer");
-        applyProfile(result.profile, `http://localhost:8080`);
+        applyProfile(result.profile, API_BASE_URL);
       }
     } catch (err) {
       console.error("Customer profile fetch failed", err);
