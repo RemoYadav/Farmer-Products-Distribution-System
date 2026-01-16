@@ -11,7 +11,7 @@ const generateLogNumber = require("../utils/generateLogNumber");
 const signup = async (req, res) => {
   try {
     const { role, email, password } = req.body;
-
+   const logId = await generateLogNumber();
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -45,6 +45,17 @@ const signup = async (req, res) => {
         redirectTo = "/farmer/create-profile";
       }
     }
+    await LoginActivity.create({
+      logId,
+      userId: user._id,
+      email,
+      role: user.role,
+      action: "Signup",
+      status: "success",
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+      details:"New user signup"
+    });
 
     res.status(201).json({
       success: true,
