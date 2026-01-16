@@ -19,7 +19,6 @@ import CustomerMyOrders from "./pages/customers/CustomerMyOrders";
 import PlaceOrders from "./pages/customers/PlaceOrders";
 import CustomerProfile from "./pages/customers/Profile";
 import Market from "./pages/Market";
-import { Navigate } from "react-router-dom";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
@@ -32,15 +31,10 @@ const App = () => {
         setRole={setRole}
         setLoading={setLoading}
       />
-
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        {/* PUBLIC */}
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated}
           setRole={setRole} />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-        {/* CUSTOMER */}
         <Route
           element={
             <PrivateRoute
@@ -75,7 +69,7 @@ const App = () => {
           <Route path="/farmer/about" element={<About />} />
         </Route>
 
-        {/* 🛠 ADMIN */}
+        {/* ADMIN */}
         <Route
           element={
             <PrivateRoute
