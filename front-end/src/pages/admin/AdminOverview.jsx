@@ -43,7 +43,7 @@ import "./AdminDashboard.css";
 import { Link, Navigate } from "react-router-dom";
 
 
-export function AdminDashboard() {
+export default function AdminOverview() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
@@ -278,19 +278,11 @@ export function AdminDashboard() {
       <Header />
       <div>
 
-        {/* Home Tab */}
-        {activeTab === "home" && (
-          <div className="home-section flex justify-center items-center flex-col">
-            <h2 className="section-title text-black">Dashboard Home</h2>
-            <p style={{ color: "black" }}>Welcome to the Admin Dashboard. Select a tab to view system information.</p>
-         
-          </div>
-        )}
 
         {/* Overview Tab */}
-        {activeTab === "overview" && (
+        { (
           <div className="overview-section">
-            <h2 className="section-title">System Overview</h2>
+            <h2 className="ad-section-title">System Overview</h2>
 
             {/* Statistics Grid */}
             <div className="stats-grid">
@@ -299,10 +291,10 @@ export function AdminDashboard() {
                   <Users className="stat-icon blue" />
                   <span className="stat-label">Total Users</span>
                 </div>
-                <div className="stat-value">{stats.totalFarmers + stats.totalCustomers}</div>
+                {/* <div className="stat-value">{stats.totalFarmers + stats.totalCustomers}</div> */}
                 <div className="stat-details">
-                  <span>{stats.totalFarmers} Farmers</span>
-                  <span>{stats.totalCustomers} Customers</span>
+                  {/* <span>{stats.totalFarmers} Farmers</span> */}
+                  {/* <span>{stats.totalCustomers} Customers</span> */}
                 </div>
               </div>
 
@@ -311,9 +303,9 @@ export function AdminDashboard() {
                   <UserCheck className="stat-icon green" />
                   <span className="stat-label">Active Users</span>
                 </div>
-                <div className="stat-value">{stats.activeFarmers + stats.activeCustomers}</div>
+                <div className="stat-value">{10}</div>
                 <div className="stat-breakdown">
-                  {stats.activeFarmers}F / {stats.activeCustomers}C
+                  {2}F / {8}C
                 </div>
               </div>
 
@@ -322,8 +314,8 @@ export function AdminDashboard() {
                   <Clock className="stat-icon yellow" />
                   <span className="stat-label">Pending Approvals</span>
                 </div>
-                <div className="stat-value">{stats.pendingApprovals}</div>
-                {stats.pendingApprovals > 0 && (
+                <div className="stat-value">{0}</div>
+                {stats== 0 && (
                   <button
                     className="stat-action"
                     onClick={() => {
@@ -341,9 +333,9 @@ export function AdminDashboard() {
                   <ShoppingBag className="stat-icon purple" />
                   <span className="stat-label">Total Orders</span>
                 </div>
-                <div className="stat-value">{stats.totalOrders}</div>
+                <div className="stat-value">{7}</div>
                 <div className="stat-breakdown">
-                  {stats.pendingOrders} Pending
+                   Pending
                 </div>
               </div>
 
@@ -352,15 +344,15 @@ export function AdminDashboard() {
                   <Package className="stat-icon teal" />
                   <span className="stat-label">Products Listed</span>
                 </div>
-                <div className="stat-value">{stats.totalProducts}</div>
+                <div className="stat-value">{0}</div>
               </div>
 
               <div className="stat-card">
                 <div className="stat-header">
-                  <DollarSign className="stat-icon green" />
+                  रु- 
                   <span className="stat-label">Total Revenue</span>
                 </div>
-                <div className="stat-value">${stats.totalRevenue}</div>
+                <div className="stat-value">${0}</div>
               </div>
 
               <div className="stat-card alert">
@@ -368,15 +360,15 @@ export function AdminDashboard() {
                   <AlertCircle className="stat-icon red" />
                   <span className="stat-label">Security Issues</span>
                 </div>
-                <div className="stat-value">{stats.securityIssues}</div>
-                {stats.securityIssues > 0 && (
+                <div className="stat-value">{0}</div>
+                {/* {stats > 0 && (
                   <button
                     className="stat-action danger"
                     onClick={() => setActiveTab("security")}
                   >
                     View Details
                   </button>
-                )}
+                )} */}
               </div>
 
               <div className="stat-card">
@@ -411,104 +403,8 @@ export function AdminDashboard() {
             </div>
           </div>
         )}
-
-        {/* Users Tab */}
-        {activeTab === "users" && (
-          <div className="users-section">
-            <AdminUsers />
-          </div>
-        )}
-
-        {/* Orders Tab */}
-        {activeTab === "orders" && (
-          <div className="orders-section">
-            <h2 className="section-title">Order Monitoring</h2>
-
-            <AdminOrder />
-          </div>
-        )}
-
-        {/* Products Tab */}
-        {activeTab === "products" && (
-          <div className="products-section-admin">
-            <div className="search-box mb-5 mt-5 ">
-              <Search className="search-icon " />
-              <input
-                type="text"
-                placeholder="Search users..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="products-grid-admin">
-              {filteredProducts.map(product => (
-                <div key={product.id} className="product-card-admin">
-                  {product.imagePreview && (
-                    <img src={product.imagePreview} alt={product.name} className="product-image-admin" />
-                  )}
-                  <div className="product-info-admin">
-                    <h3>{product.name}</h3>
-                    <p className="product-category">{product.category}</p>
-                    <div className="product-details-admin">
-                      <span className="product-price">${product.price}/{product.unit}</span>
-                      <span className={`product-stock ${parseInt(product.stock) < 10 ? "low" : ""}`}>
-                        Stock: {product.stock}
-                      </span>
-                    </div>
-                    <div className="product-actions">
-                      <button
-                        className="btn-edit"
-                        onClick={() => handleEdit(product)}
-                      >
-                        <Edit className="icon-sm" />
-                        Edit
-                      </button>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDeleteProduct(product.id)}
-                      >
-                        <Trash2 className="icon-sm" />
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Security Tab */}
-        {activeTab === "security" && (
-          <div className="security-section">
-            <h2 className="section-title">Security Logs</h2>
-            <div className="security-logs">
-              {securityLogs.map(log => (
-                <div key={log.userId} className={`log-item ${log.status}`}>
-                  <div className="log-icon">
-                    {log.status === "success" ? (
-                      <CheckCircle className="icon-sm green" />
-                    ) : (
-                      <XCircle className="icon-sm red" />
-                    )}
-                  </div>
-                  <div className="log-content">
-                    <div className="log-header">
-                      <span className="log-user">User: {log.email}</span>
-                      <span className="log-time">{formatDateTime(log.createdAt)}</span>
-                    </div>
-                    <p className="log-action">{log.action.replace("_", " ").toUpperCase()}</p>
-                    <p className="log-details">{log.details}</p>
-                    <span className="log-ip">IP: {log.ipAddress}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* User Details Modal */}
+        </div>  
+       
 
       <ToastContainer />
     </div>

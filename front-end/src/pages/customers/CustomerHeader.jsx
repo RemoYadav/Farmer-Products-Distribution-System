@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { useNotifications } from "../../context/NotificationContext";
 import {
   ShoppingBag,
-
   User,
-  
   LogOut,
-  
   Home,
   BarChart3,
-  
-  Shield,
-  
+  Bell,
   Settings
 } from "lucide-react";
 import "./css/CustomerHeader.css"
@@ -23,8 +18,8 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { logOut } = useAuth()
-  // const { fetchCustomerProfile, userName, profileImage } = useProfile();
-
+  const { count, open, setOpen, fetchNotifications } = useNotifications();
+  const [animate, setAnimate] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [email, setEmail] = useState("")
 
@@ -42,7 +37,20 @@ const Header = () => {
     if (location.pathname.includes("/about")) return "about";
     return "";
   };
+  const toggle = () => {
+    setOpen(!open);
+    if (!open) fetchNotifications();
+  };
+  useEffect(() => {
+    if (count === 0) return;
 
+    const interval = setInterval(() => {
+      setAnimate(true);
+      setTimeout(() => setAnimate(false), 800);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [count]);
   useEffect(() => {
     setEmail(localStorage.getItem("email" || ""));
   }, []);
@@ -62,7 +70,7 @@ const Header = () => {
         );
 
         const data = await res.json();
-    
+
         if (data.success && data.profile) {
           setUserName(data.profile.fullName || "Guest");
           setProfileImage(
@@ -96,7 +104,7 @@ const Header = () => {
                 alt="Profile"
                 className="profile-img"
               />
-              <h1>Customer Dashboard</h1>
+              <h1>{userName}</h1>
             </div>
             <p className="header-subtitle"></p>
           </div>
@@ -142,8 +150,20 @@ const Header = () => {
             <div className="user-info">
 
               <div className="user-details">
-                <p className="">{userName}</p>
-                <p className="user-role">{email}</p>
+                <div
+                  className="relative cursor-pointer"
+                  onClick={toggle}
+                >
+                  <Bell
+                    className={`w-6 h-6 transition
+                                       ${animate ? "animate-bounce text-green-600" : ""}`}
+                  />
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      {count}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="user-menu">
                 <div className="user-avatar menu-toggle"

@@ -190,7 +190,7 @@ export default function Profile() {
 
             <div className="bg-gradient-to-r from-green-600 to-green-700 items-center text-white">
               <div className="flex justify-center p-4 mt-4 aligen-items-center gap-3">
-                <Leaf className="size-8" />
+                <User className="size-8" />
                 <h1 className="text-white text-lg">Personal Information</h1>
                 <img src={formData.previewImage} alt="" />
 

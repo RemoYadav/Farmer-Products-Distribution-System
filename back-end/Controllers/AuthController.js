@@ -140,38 +140,7 @@ const login = async (req, res) => {
     });
   }
 }
-// const getMe = async (req, res) => {
-//   try {
-//     const user = req.user;
 
-//     if (!user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Unauthorized",
-//       });
-//     }
-
-//     let profileCompleted = true;
-
-//     if (user.role === "farmer") {
-//       const profile = await FarmerProfile.findOne({ userId: user._id });
-//       profileCompleted = !!profile;
-//     }
-
-//     res.json({
-//       success: true,
-//       role: user.role,
-//       email: user.email,
-//       profileCompleted,
-//     });
-//   } catch (err) {
-//     console.error("getMe error:", err);
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal Server Error",
-//     });
-//   }
-// };
 const getMe = async (req, res) => {
   try {
     const user = req.user;
@@ -179,7 +148,6 @@ const getMe = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     // Fetch customer profile by email
     const profile = await CustomerProfile.findOne({ email: user.email });
 
@@ -198,8 +166,5 @@ const getMe = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
-
 
 module.exports = { signup, login, getMe };

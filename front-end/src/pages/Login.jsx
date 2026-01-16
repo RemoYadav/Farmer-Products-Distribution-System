@@ -41,7 +41,6 @@ const Login = ({ setIsAuthenticated, setRole }) => {
     e.preventDefault();
     if (validation()) {
       if (isLoginMode) {
-console.log(`${API_BASE_URL}/auth/login`)
         try {
           const payload = {
             email: formData.email.trim(),

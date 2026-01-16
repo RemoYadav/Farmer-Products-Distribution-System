@@ -1,7 +1,7 @@
 const Order = require("../Models/Order");
 const generateOrderNumber = require("../utils/generateOrderNumber");
 const Product = require("../Models/Product");
-const Notification =require( "../Models/Notification.js");
+const Notification = require("../Models/Notification.js");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -141,7 +141,7 @@ exports.getcustomerOrders = async (req, res) => {
 
 // Controller to get all orders for a specific farmer
 exports.getAdminOrders = async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params;
   try {
     const orders = await Order.find({ farmerId: id })
       .populate({
@@ -168,12 +168,12 @@ exports.getAdminOrders = async (req, res) => {
 
       farmer: order.productId?.farmerId
         ? {
-            id: order.productId.farmerId._id,
-            fullName: order.productId.farmerId.fullName,
-            farmName: order.productId.farmerId.farmName,
-            email: order.productId.farmerId.email,
-            phone: order.productId.farmerId.phone
-          }
+          id: order.productId.farmerId._id,
+          fullName: order.productId.farmerId.fullName,
+          farmName: order.productId.farmerId.farmName,
+          email: order.productId.farmerId.email,
+          phone: order.productId.farmerId.phone
+        }
         : null
     }));
 
@@ -186,7 +186,7 @@ exports.getAdminOrders = async (req, res) => {
 
 
 // exports.updateOrderStatus = async (req, res) => {
-  const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 
 
@@ -229,16 +229,40 @@ exports.updateOrderStatus = async (req, res) => {
         order.rejectedAt = new Date();
         order.rejectionReason = rejectedReason || "No reason provided";
         await order.save({ session });
-         responseMessage = "Order rejected successfully";
+        await Notification.create(
+          [
+            {
+              senderId: farmerId,
+              receiverId: order.customerId,
+              type: "ORDER_REJECTED",
+              message: `Your order for ${product.name} was rejected`,
+              reason: order.rejectionReason,
+              orderNumber: order.orderNumber
+            }
+          ],
+          { session }
+        );
+        responseMessage = "Order rejected successfully";
         return;
       }
 
+      // 🟩 APPROVE (reduce stock)
       // 🟩 APPROVE (reduce stock)
       if (status === "approved") {
         if (order.status !== "pending") {
           throw new Error("Only pending orders can be approved");
         }
 
+        // 🔎 Get product details
+        const product = await Product.findById(order.productId)
+          .select("name")
+          .session(session);
+
+        if (!product) {
+          throw new Error("Product not found");
+        }
+
+        // 🔻 Reduce stock
         const result = await Product.updateOne(
           {
             _id: order.productId,
@@ -254,12 +278,30 @@ exports.updateOrderStatus = async (req, res) => {
           throw new Error("Insufficient stock");
         }
 
+        // ✅ Update order
         order.status = "approved";
         order.approvedAt = new Date();
         await order.save({ session });
+
+        // 🔔 Create notification for CUSTOMER
+        await Notification.create(
+          [
+            {
+              senderId: farmerId,          // farmer
+              receiverId: order.customerId, // customer
+              type: "ORDER_APPROVED",
+              message: `Your order for ${product.name} has been approved`,
+              orderNumber: order.orderNumber,
+              productId: order.productId
+            }
+          ],
+          { session }
+        );
+
         responseMessage = "Order approved successfully";
         return;
       }
+
 
       // 🚚 DELIVER (NO stock change)
       if (status === "delivered") {
@@ -275,7 +317,7 @@ exports.updateOrderStatus = async (req, res) => {
       }
     });
 
-    res.json({message: responseMessage});
+    res.json({ message: responseMessage });
 
   } catch (err) {
     console.error("Order status update error:", err);

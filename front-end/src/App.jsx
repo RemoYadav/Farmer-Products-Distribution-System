@@ -9,17 +9,20 @@ import Forgot from "./pages/Forgot";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrders from "./pages/admin/AdminOrders";
+import AdminSecurity from "./pages/admin/AdminSecurity";
+import AdminOverview from "./pages/admin/AdminOverview";
+
 import FarmerDashboard from "./pages/farmers/FarmerDashboard";
 import Profile from "./pages/farmers/Profile";
 import Products from "./pages/farmers/Products";
 import About from "./pages/farmers/About";
 import FarmerOrders from "./pages/farmers/FarmerOrders";
+
 import CustomerDashboard from "./pages/customers/CustomerDashboard";
 import CustomerMyOrders from "./pages/customers/CustomerMyOrders";
 import PlaceOrders from "./pages/customers/PlaceOrders";
 import CustomerProfile from "./pages/customers/Profile";
 import Market from "./pages/Market";
-
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
@@ -31,22 +34,21 @@ const App = () => {
         setIsAuthenticated={setIsAuthenticated}
         setRole={setRole}
         setLoading={setLoading}
+        loading={loading}
       />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        {/* PUBLIC */}
+       
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated}
           setRole={setRole} />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-        {/* CUSTOMER */}
         <Route
           element={
             <PrivateRoute
               isAuthenticated={isAuthenticated}
               role={role}
               allowedRoles={["customer"]}
+              loading={loading}
             />
           }
         >
@@ -65,6 +67,7 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               role={role}
               allowedRoles={["farmer"]}
+              loading={loading}
             />
           }
         >
@@ -82,12 +85,15 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               role={role}
               allowedRoles={["admin"]}
+              loading={loading}
             />
           }
         >
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/orders/:id" element={<AdminOrders />} />
+          <Route path="/security/logs" element={<AdminSecurity />} />
+          <Route path="/admin/overview" element={<AdminOverview />} />
         </Route>
       </Routes>
 

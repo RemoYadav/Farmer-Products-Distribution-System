@@ -23,8 +23,6 @@ export const NotificationProvider = ({ children }) => {
       console.error(err);
     }
   };
-  
-
   // 📩 fetch notifications list
   const fetchNotifications = async () => {
     try {

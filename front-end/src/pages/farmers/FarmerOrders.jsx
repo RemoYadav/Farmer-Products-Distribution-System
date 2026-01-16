@@ -27,15 +27,10 @@ const FarmerOrders = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [view, setView] = useState("tableView");
-    const [activeNavigation, setActiveNavigation] = useState("orders");
-    const [email, setEmail] = useState("");
-    const [showUserMenu, setShowUserMenu] = useState(false);
     const [requests, setRequests] = useState([]);
     const [activeTab, setActiveTab] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedRequest, setSelectedRequest] = useState(null);
-    const [btnColor, setBtnColor] = useState("viewed");
-    const [previewImage, setPreviewImage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null)
     useEffect(() => {
@@ -227,7 +222,7 @@ const FarmerOrders = () => {
                         </div>
                         <div className="stat-content">
                             <p className="stat-label">Revenue</p>
-                            <p className="stat-value">Nrs {stats.totalRevenue.toFixed(2)}</p>
+                            <p className="stat-value">रु-{stats.totalRevenue.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
@@ -357,7 +352,7 @@ const FarmerOrders = () => {
                                                 onClick={() => handleOrderDetailClick(order)}
                                                 className="bg-[#2e7d32] text-white px-2 py-1 rounded-md"
                                             >
-                                                View Details
+                                                <Eye className="icon-sm" />
                                             </button>
                                         )}
 

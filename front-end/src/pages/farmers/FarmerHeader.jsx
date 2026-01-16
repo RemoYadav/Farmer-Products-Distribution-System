@@ -14,7 +14,6 @@ import {
   Shield,
   Settings
 } from "lucide-react";
-// import "./Header.css"
 import { ToastContainer, toast } from "react-toastify";
 const FarmerHeader = () => {
 
@@ -108,7 +107,7 @@ const FarmerHeader = () => {
                 alt="Profile"
                 className="profile-img"
               />
-              <h1>Customer Dashboard</h1>
+              <h1>{farmName}</h1>
             </div>
             <p className="header-subtitle"></p>
           </div>
@@ -164,9 +163,6 @@ const FarmerHeader = () => {
                        ${animate ? "animate-bounce text-green-600" : ""}`}
                   />
                   {count > 0 && (
-                    // <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
-                    //   {count}
-                    // </span>
                     <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                       {count}
                     </span>
