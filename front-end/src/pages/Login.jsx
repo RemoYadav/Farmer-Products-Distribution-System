@@ -79,7 +79,7 @@ const Login = ({ setIsAuthenticated, setRole }) => {
         } catch (error) {
           // network / server error
           console.log(error)
-          handleError(error.message || "Login failed");
+          handleError("Server not responding. Please try again later.");
         }
 
 
