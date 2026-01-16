@@ -108,7 +108,7 @@ const FarmerHeader = () => {
                 alt="Profile"
                 className="profile-img"
               />
-              <h1>Customer Dashboard</h1>
+              <h1>{farmName}</h1>
             </div>
             <p className="header-subtitle"></p>
           </div>
