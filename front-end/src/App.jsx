@@ -14,7 +14,7 @@ import Profile from "./pages/farmers/Profile";
 import Products from "./pages/farmers/Products";
 import About from "./pages/farmers/About";
 import FarmerOrders from "./pages/farmers/FarmerOrders";
-import  CustomerDashboard from "./pages/customers/CustomerDashboard";
+import CustomerDashboard from "./pages/customers/CustomerDashboard";
 import CustomerMyOrders from "./pages/customers/CustomerMyOrders";
 import PlaceOrders from "./pages/customers/PlaceOrders";
 import CustomerProfile from "./pages/customers/Profile";
@@ -24,7 +24,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   return (
     <div className="grid w-full min-h-screen">
       <Referesh
@@ -32,13 +32,14 @@ const App = () => {
         setRole={setRole}
         setLoading={setLoading}
       />
-      
-      <Routes>
-        {/* PUBLIC */}
-        <Route path="/login" element={<Login   setIsAuthenticated={setIsAuthenticated}
-        setRole={setRole}/>} />
-        <Route path="/forgot" element={<Forgot />} />
 
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* PUBLIC */}
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated}
+          setRole={setRole} />} />
+        <Route path="/forgot" element={<Forgot />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
         {/* CUSTOMER */}
         <Route
           element={
@@ -89,9 +90,9 @@ const App = () => {
           <Route path="/admin/orders/:id" element={<AdminOrders />} />
         </Route>
       </Routes>
-     
+
     </div>
-    
+
   );
 };
 
