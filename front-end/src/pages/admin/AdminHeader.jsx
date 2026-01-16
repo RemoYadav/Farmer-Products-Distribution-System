@@ -205,6 +205,7 @@ const Header = () => {
                         </div>
                     </div>
                 </div>
+                <NotificationDrawer />
             </div>
         </div>
     )
