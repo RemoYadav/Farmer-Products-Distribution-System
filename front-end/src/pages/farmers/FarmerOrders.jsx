@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FarmerHeader from "./FarmerHeader"
 import { ToastContainer, toast } from "react-toastify";
 import "./css/FarmerOrders.css"
@@ -24,7 +23,6 @@ import {
 const FarmerOrders = () => {
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [view, setView] = useState("tableView");
     const [requests, setRequests] = useState([]);

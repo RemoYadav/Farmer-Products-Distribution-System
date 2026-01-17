@@ -91,3 +91,13 @@
 .activity-list li:last-child {
   border-bottom: none;
 }
+@media (max-width: 450px) {
+  .body{
+    width:fit-content
+  }
+}
+@media (max-width: 400px) {
+  .barView{
+    overflow-x: scroll;
+  }
+}

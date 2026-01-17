@@ -4,6 +4,9 @@ const Farmer = require("../Models/Farmer");
 const Customer = require("../Models/Customer");
 const Product = require("../Models/Product"); // if exists
 const SecurityLog = require("../Models/SecurityLog"); // if exists
+
+
+
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: { $ne: "admin" } })

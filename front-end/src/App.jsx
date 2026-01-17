@@ -11,7 +11,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminSecurity from "./pages/admin/AdminSecurity";
 import AdminOverview from "./pages/admin/AdminOverview";
-
+import AdminProducts from "./pages/admin/AdminProducts"
 import FarmerDashboard from "./pages/farmers/FarmerDashboard";
 import Profile from "./pages/farmers/Profile";
 import Products from "./pages/farmers/Products";
@@ -91,9 +91,10 @@ const App = () => {
         >
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/orders/:id" element={<AdminOrders />} />
+          <Route path="/admin/orders/:id/:farmName" element={<AdminOrders />} />
           <Route path="/security/logs" element={<AdminSecurity />} />
           <Route path="/admin/overview" element={<AdminOverview />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
         </Route>
       </Routes>
 

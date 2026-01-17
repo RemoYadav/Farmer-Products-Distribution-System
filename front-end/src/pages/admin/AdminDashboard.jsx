@@ -133,6 +133,7 @@ export function AdminDashboard() {
       .catch(err => console.error("Stats error:", err));
 
   }, [token, API_BASE_URL]);
+  
   const saveUsers = (updatedUsers) => {
     setUsers(updatedUsers);
   };
@@ -281,7 +282,7 @@ export function AdminDashboard() {
         {/* Home Tab */}
         {activeTab === "home" && (
           <div className="home-section flex justify-center items-center flex-col">
-            <h2 className="section-title text-black">Dashboard Home</h2>
+            <h2 className="ad-section-title">Dashboard Home</h2>
             <p style={{ color: "black" }}>Welcome to the Admin Dashboard. Select a tab to view system information.</p>
          
           </div>
@@ -290,7 +291,7 @@ export function AdminDashboard() {
         {/* Overview Tab */}
         {activeTab === "overview" && (
           <div className="overview-section">
-            <h2 className="section-title">System Overview</h2>
+            <h2 className="ad-section-title">System Overview</h2>
 
             {/* Statistics Grid */}
             <div className="stats-grid">
@@ -478,37 +479,10 @@ export function AdminDashboard() {
           </div>
         )}
 
-        {/* Security Tab */}
-        {activeTab === "security" && (
-          <div className="security-section">
-            <h2 className="section-title">Security Logs</h2>
-            <div className="security-logs">
-              {securityLogs.map(log => (
-                <div key={log.userId} className={`log-item ${log.status}`}>
-                  <div className="log-icon">
-                    {log.status === "success" ? (
-                      <CheckCircle className="icon-sm green" />
-                    ) : (
-                      <XCircle className="icon-sm red" />
-                    )}
-                  </div>
-                  <div className="log-content">
-                    <div className="log-header">
-                      <span className="log-user">User: {log.email}</span>
-                      <span className="log-time">{formatDateTime(log.createdAt)}</span>
-                    </div>
-                    <p className="log-action">{log.action.replace("_", " ").toUpperCase()}</p>
-                    <p className="log-details">{log.details}</p>
-                    <span className="log-ip">IP: {log.ipAddress}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+       
       </div>
 
-      {/* User Details Modal */}
+  
 
       <ToastContainer />
     </div>

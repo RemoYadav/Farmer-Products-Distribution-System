@@ -6,6 +6,11 @@ const authMiddleware = require("../Middlewares/AdminAuth");
 const adminController = require("../Controllers/AdminController");
 const LoginActivity = require("../Models/LoginActivity")
 
+// Users
+router.get("/users", adminController.getAllUsers);
+router.patch("/users/:id/status", adminController.toggleUserStatus);
+router.delete("/users/:id", adminController.deleteUsers );
+
 // Customers
 router.get("/customers", adminController.getAllCustomers);
 router.delete("/customers/:id", adminController.deleteCustomer);
@@ -16,6 +21,7 @@ router.get("/farmers", adminController.getAllFarmers);
 router.delete("/farmers/:id", adminController.deleteFarmer);
 router.patch("/farmers/:id/status", adminController.toggleFarmerStatus);
 // Admin dashboard stats
+
 router.get("/stats", authMiddleware, getAdminStats);
 router.get("/login-activity", authMiddleware, async (req, res) => {
   const logs = await LoginActivity

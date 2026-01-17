@@ -21,6 +21,7 @@ exports.saveProfile = async (req, res) => {
         city,
         state,
         zipCode,
+        status: "active",
         image: imagePath || null,
       });
 

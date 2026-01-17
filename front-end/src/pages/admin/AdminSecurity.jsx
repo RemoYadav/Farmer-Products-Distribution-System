@@ -9,7 +9,7 @@ import {
 import "./AdminDashboard.css";
 export default function AdminSecurity() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const [isLoading, setIsLoading] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
   const [securityLogs, setSecurityLogs] = useState([]);
    const token = localStorage.getItem("token");
@@ -21,13 +21,14 @@ export default function AdminSecurity() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`${API_BASE_URL}/admin/login-activity`, {
+    fetch(`${API_BASE_URL}/api/admin/login-activity`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
       .then(res => res.json())
-      .then(data => setSecurityLogs(data) && setIsLoading(false));
+      .then(data => setSecurityLogs(data).the );
+      setIsLoading(false);
   }, [API_BASE_URL, token]);  
   
 

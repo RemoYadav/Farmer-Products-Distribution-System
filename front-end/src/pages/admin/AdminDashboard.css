@@ -115,7 +115,7 @@
   
 }
 
-.tab-btn {
+.ad-tab-btn {
   padding: 0.75rem 1.5rem;
   background: transparent;
   color: #666;
@@ -129,12 +129,15 @@
   transition: all 0.2s;
   white-space: nowrap;
 }
+.viewed{
+  color: rgba(55, 55, 229, 0.633);
+}
 
 .tab-btn:hover {
   background: #f5f5f5;
 }
 
-.tab-btn.active {
+.ad-tab-btn.active {
   background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
   color: white;
 }
@@ -573,7 +576,7 @@ span{
 
 .users-table th {
   padding: 1rem;
-  text-align: left;
+  text-align: center;
   color: #333;
   font-weight: 600;
   font-size: 0.9rem;
@@ -581,7 +584,8 @@ span{
 }
 
 .users-table td {
-  padding: 1rem;
+  padding: 0.5rem;
+  text-align: center;
   border-top: 1px solid #e0e0e0;
   font-size: 0.9rem;
 }
@@ -1274,5 +1278,19 @@ span{
 
   .products-grid-admin {
     grid-template-columns: 1fr;
+  }
+}
+.spinner3 {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(4, 177, 24, 0.3);
+  border-top-color: rgb(29, 26, 238);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

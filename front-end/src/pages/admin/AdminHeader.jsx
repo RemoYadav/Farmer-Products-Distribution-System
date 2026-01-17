@@ -56,9 +56,11 @@ const Header = () => {
         if (location.pathname.includes("/admin/dashboard")) return "dashboard";
         if (location.pathname.includes("/marcket")) return "marcket";
         if (location.pathname.includes("/admin/orders")) return "orders";
+        if (location.pathname.includes("/admin/users")) return "users";
+        if (location.pathname.includes("/admin/products")) return "products";
         if (location.pathname.includes("/admin/overview")) return "overview";
-        if (location.pathname.includes("/admin/about")) return "about";
         if (location.pathname.includes("/security/logs")) return "security";
+        if (location.pathname.includes("/admin/about")) return "about";
         return "";
     };
 
@@ -117,42 +119,42 @@ const Header = () => {
                     </div>
                     <div className="admin-tabs">
                         <button
-                            className={`tab-btn ${activeNavigation === "home" ? "active" : ""}`}
+                            className={`ad-tab-btn ${activeNavigation() === "dashboard" ? "active" : ""}`}
                             onClick={() => navigate("/admin/dashboard")}
                         >
                             <Home className="tab-icon" />
                             Home
                         </button>
                         <button
-                            className={`tab-btn ${activeNavigation === "overview" ? "active" : ""}`}
+                            className={`ad-tab-btn ${activeNavigation() === "overview" ? "active" : ""}`}
                             onClick={() => navigate("/admin/overview")}
                         >
                             <BarChart3 className="tab-icon" />
                             Overview
                         </button>
                         <button
-                            className={`tab-btn ${activeNavigation === "users" ? "active" : ""}`}
+                            className={`ad-tab-btn ${activeNavigation() === "users" ? "active" : ""}`}
                             onClick={() => navigate("/admin/users")}
                         >
                             <Users className="tab-icon" />
                             Users
                         </button>
                         {/* <button
-                        className={`tab-btn ${activeNavigation === "orders" ? "active" : ""}`}
+                        className={`ad-tab-btn ${activeNavigation() === "orders" ? "active" : ""}`}
                         onClick={() => navigate("/admin/orders")}
                     >
                         <ShoppingBag className="tab-icon" />
                         Orders
                     </button> */}
-                        {/* <button
-                        className={`tab-btn ${activeNavigation === "products" ? "active" : ""}`}
+                        <button
+                        className={`ad-tab-btn ${activeNavigation() === "products" ? "active" : ""}`}
                         onClick={() => navigate("/admin/products")}
                     >
                         <Package className="tab-icon" />
                         Products
-                    </button> */}
+                    </button>
                         <button
-                            className={`tab-btn ${activeNavigation === "security" ? "active" : ""}`}
+                            className={`ad-tab-btn ${activeNavigation() === "security" ? "active" : ""}`}
                             onClick={() => navigate("/security/logs")}
                         >
                             <Shield className="tab-icon" />

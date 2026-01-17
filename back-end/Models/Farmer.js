@@ -76,7 +76,12 @@ const FarmerSchema = new mongoose.Schema(
 
     image: {
       type: String
-    }
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "suspended"],
+      default: "active",
+    },
   },
   {
     timestamps: true // creates createdAt & updatedAt

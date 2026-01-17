@@ -24,6 +24,7 @@ const signup = async (req, res) => {
 
     const user = await UserModel.create({
       role,
+      status: "active",
       email,
       password: hashedPassword,
     });
@@ -129,6 +130,12 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
+    if(!user.is_active){
+      return res.status(403).json({
+        message: "Your account is suspended. Please contact support.", 
+        success: false
+      });
+    }
     if (jwtToken) {
       res.status(200).json({
         message: "User logged in successfully",

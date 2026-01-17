@@ -161,7 +161,7 @@ export default function FarmerDashboard() {
     );
   }
   return (
-    <div>
+    <div className="">
       <div>
         <FarmerHeader />
       </div>

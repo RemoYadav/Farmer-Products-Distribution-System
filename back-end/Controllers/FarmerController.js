@@ -46,7 +46,8 @@ exports.saveProfile = async (req, res) => {
         yearsExperience,
         organicCertified,
         bio,
-        image
+        image,
+        status: "active"
       });
 
       await farmer.save();

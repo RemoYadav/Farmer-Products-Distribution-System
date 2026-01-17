@@ -55,7 +55,7 @@ export default function AdminOverview() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterUserType, setFilterUserType] = useState("all");
   const [email, setEmail] = useState("");
-   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   }, []);
@@ -89,7 +89,7 @@ export default function AdminOverview() {
               imagePreview: p.image ? `${API_BASE_URL}/${p.image}` : null// base64 or image path
             }))
           );
-         
+
 
         } else {
           console.error(data.message);
@@ -117,22 +117,36 @@ export default function AdminOverview() {
       .then(data => setSecurityLogs(data));
   }, [API_BASE_URL, token]);
 
-  const [stats, setStats] = useState(null);
+ const [stats, setStats] = useState({
+    totalFarmers: 0,
+    totalCustomers: 0,
+    totalProducts: 0,
+    totalOrders: 0
+  });
+console.log(stats)
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/api/admin/stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    fetch(`${API_BASE_URL}/admin/stats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => setStats(data))
-      .catch(err => console.error("Stats error:", err));
+      if (!res.ok) throw new Error("Failed to fetch stats");
 
-  }, [token, API_BASE_URL]);
+      const data = await res.json();
+      setStats(data);
+    } catch (err) {
+      console.error("Stats error:", err);
+    }
+  };
+
+  fetchStats();
+}, [API_BASE_URL]);
+
   const saveUsers = (updatedUsers) => {
     setUsers(updatedUsers);
   };
@@ -280,8 +294,8 @@ export default function AdminOverview() {
 
 
         {/* Overview Tab */}
-        { (
-          <div className="overview-section">
+        {(
+          <div className="overview-section p-5">
             <h2 className="ad-section-title">System Overview</h2>
 
             {/* Statistics Grid */}
@@ -291,21 +305,36 @@ export default function AdminOverview() {
                   <Users className="stat-icon blue" />
                   <span className="stat-label">Total Users</span>
                 </div>
-                {/* <div className="stat-value">{stats.totalFarmers + stats.totalCustomers}</div> */}
+                <div className="stat-value">{stats.totalUsers}</div>
                 <div className="stat-details">
-                  {/* <span>{stats.totalFarmers} Farmers</span> */}
-                  {/* <span>{stats.totalCustomers} Customers</span> */}
+                  <span>{stats.activeUsers} A</span>
+                  <span>{stats.suspendUsers} S</span>
                 </div>
               </div>
 
               <div className="stat-card">
                 <div className="stat-header">
                   <UserCheck className="stat-icon green" />
-                  <span className="stat-label">Active Users</span>
+                  <span className="stat-label">Total Farmers</span>
                 </div>
-                <div className="stat-value">{10}</div>
+                <div className="stat-value">{stats.totalFarmers}</div>
+                <div className="stat-details">
+                  <span>{stats.activeFarmers} A</span>
+                  <span>{stats.suspendFarmers} S</span>
+                </div>
+              </div>
+
+              <div className="stat-card">
+                <div className="stat-header">
+                  <UserCheck className="stat-icon green" />
+                  <span className="stat-label">Total Customers</span>
+                </div>
+                <div className="stat-value">{stats.totalCustomers}</div>
                 <div className="stat-breakdown">
-                  {2}F / {8}C
+                  <div className="stat-details">
+                  <span>{stats.activeCustomers} A</span>
+                  <span>{stats.suspendCustomers} S</span>
+                </div>
                 </div>
               </div>
 
@@ -314,8 +343,8 @@ export default function AdminOverview() {
                   <Clock className="stat-icon yellow" />
                   <span className="stat-label">Pending Approvals</span>
                 </div>
-                <div className="stat-value">{0}</div>
-                {stats== 0 && (
+                <div className="stat-value">{stats.pendingApprovals}</div>
+                {stats.pendingApprovals > 0 && (
                   <button
                     className="stat-action"
                     onClick={() => {
@@ -333,9 +362,11 @@ export default function AdminOverview() {
                   <ShoppingBag className="stat-icon purple" />
                   <span className="stat-label">Total Orders</span>
                 </div>
-                <div className="stat-value">{7}</div>
+                <div className="stat-value">{stats.totalOrders}</div>
                 <div className="stat-breakdown">
-                   Pending
+                  <span>{stats.deliveredOrders} D</span>
+                  <span>{stats.pendingOrders} P</span>
+                  <span>{stats.rejectedOrders} R</span>
                 </div>
               </div>
 
@@ -344,15 +375,20 @@ export default function AdminOverview() {
                   <Package className="stat-icon teal" />
                   <span className="stat-label">Products Listed</span>
                 </div>
-                <div className="stat-value">{0}</div>
+                <div className="stat-value">{stats.totalProducts}</div>
+                <div className="stat-breakdown flex">
+                  <span>{stats.activeProducts} A</span>
+                  <span>{stats.suspendProducts} S</span>
+                  
+                </div>
               </div>
 
               <div className="stat-card">
                 <div className="stat-header">
-                  रु- 
+                  <span className="stat-icon green"> रु</span>
                   <span className="stat-label">Total Revenue</span>
                 </div>
-                <div className="stat-value">${0}</div>
+                <div className="stat-value ">रु-{stats.totalRevenue}</div>
               </div>
 
               <div className="stat-card alert">
@@ -360,15 +396,15 @@ export default function AdminOverview() {
                   <AlertCircle className="stat-icon red" />
                   <span className="stat-label">Security Issues</span>
                 </div>
-                <div className="stat-value">{0}</div>
-                {/* {stats > 0 && (
+                <div className="stat-value">{stats.securityIssues}</div>
+                {stats.securityIssues > 0 && (
                   <button
                     className="stat-action danger"
                     onClick={() => setActiveTab("security")}
                   >
                     View Details
                   </button>
-                )} */}
+                )}
               </div>
 
               <div className="stat-card">
@@ -403,8 +439,8 @@ export default function AdminOverview() {
             </div>
           </div>
         )}
-        </div>  
-       
+      </div>
+
 
       <ToastContainer />
     </div>

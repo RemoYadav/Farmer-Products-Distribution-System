@@ -6,7 +6,7 @@ const authMiddleware = require("../Middlewares/authMiddleware");
 const upload = require("../Middlewares/multerConfig"); 
 router.post("/",authMiddleware,upload.single("image"), productController.createProduct);
 router.get("/products",authMiddleware, productController.getProducts);
-router.get("/",authMiddleware, productController.getProducts);
+// router.get("/",authMiddleware, productController.getProducts);
 // router.put("/:id",authMiddleware, productController.updateProduct);
 router.patch("/delete:id",authMiddleware, productController.deleteProduct);
 router.put(

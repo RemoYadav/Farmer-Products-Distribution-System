@@ -24,6 +24,11 @@ const customerSchema = new mongoose.Schema(
     state: String,
     zipCode: String,
     image: String,
+    status: {
+      type: String,
+      enum: ["active", "inactive", "suspended"],
+      default: "active",
+    },
   },
   { timestamps: true }
 );

@@ -17,7 +17,9 @@ const productSchema = new mongoose.Schema(
     description: String,
     image: String,
     access:{
-      type:String,default:"allowed"
+      type:String,
+      enum: ["allowed", "denied"],
+      default:"allowed"
     } // base64 OR image URL
   },
   { timestamps: true }

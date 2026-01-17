@@ -63,7 +63,7 @@ exports.getProducts = async (req, res) => {
     const { email, userId, role } = req.user;
     // from JWT middleware
     if ((role === "admin")) {
-      const products = await Product.find({ farmerId: userId }).sort({ createdAt: -1 });
+      const products = await Product.find().sort({ createdAt: -1 });
       res.status(200).json(products);
     } else {
       const products = await Product.find({ access: "allowed" }).sort({ createdAt: -1 });
