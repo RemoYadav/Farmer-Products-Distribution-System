@@ -35,7 +35,7 @@ exports.getMarketProducts = async (req, res) => {
           stock: p.stock,
           description: p.description,
           image: p.image
-            ? `http://localhost:8080/${p.image.replace(/\\/g, "/")}`
+            ? p.image
             : null
         }))
       });

@@ -18,7 +18,7 @@ exports.getActivity = async (req, res) => {
     const activities = await Activity.find({
       $or: [
         { userId: userId }, // personal activity
-        { userId: null },   // global activity (all users)
+          // global activity (all users)
       ],
     })
       .sort({ createdAt: -1 })

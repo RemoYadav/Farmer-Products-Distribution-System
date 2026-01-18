@@ -295,7 +295,7 @@ export default function Market(props) {
                                         >
                                             <div className="product-image-placeholder product-image">
                                                 {product.image ? (
-                                                    <img src={product.image} alt={product.name} />
+                                                    <img src={`${API_BASE_URL}/${product.image.replace(/\\/g, "/")}`} alt={product.name} />
                                                 ) : (
                                                     <Package className="product-icon" />
                                                 )}
@@ -401,7 +401,7 @@ export default function Market(props) {
                                         >
                                             <div className="product-image-placeholder product-image">
                                                 {product.image ? (
-                                                    <img src={product.image} alt={product.name} />
+                                                    <img src={`${API_BASE_URL}/${product.image.replace(/\\/g, "/")}`} alt={product.name} />
                                                 ) : (
                                                     <Package className="product-icon" />
                                                 )}
@@ -449,7 +449,7 @@ export default function Market(props) {
                         <div className="modal-content">
                             <div className="product-image-placeholder product-image">
                                 {selectedProduct.image ? (
-                                    <img src={selectedProduct.image} alt={selectedProduct.name} />
+                                    <img src={`${API_BASE_URL}/${selectedProduct.image.replace(/\\/g, "/")}`} alt={selectedProduct.name} />
                                 ) : (
                                     <Package className="product-icon" />
                                 )}

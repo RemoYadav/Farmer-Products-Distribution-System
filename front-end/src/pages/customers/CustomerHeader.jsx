@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotifications } from "../../context/NotificationContext";
@@ -22,6 +22,7 @@ const Header = () => {
   const [animate, setAnimate] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [email, setEmail] = useState("")
+  const menuRef = useRef(null);
 
   const [userName, setUserName] = useState("");
   const [profileImage, setProfileImage] = useState("/default.jpg");
@@ -92,6 +93,22 @@ const Header = () => {
 
     fetchProfile();
   }, [token, API_BASE_URL]);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div>
@@ -165,7 +182,7 @@ const Header = () => {
                   )}
                 </div>
               </div>
-              <div className="user-menu">
+              <div className="user-menu" ref={menuRef}>
                 <div className="user-avatar menu-toggle"
                   onClick={() => setShowUserMenu(!showUserMenu)}>
                   <User className="icon-md" />
@@ -191,7 +208,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-         <NotificationDrawer />
+        <NotificationDrawer />
       </header>
     </div>
   )

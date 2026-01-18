@@ -363,7 +363,7 @@ useEffect(() => {
                   <span className="stat-label">Total Orders</span>
                 </div>
                 <div className="stat-value">{stats.totalOrders}</div>
-                <div className="stat-breakdown">
+                <div className="stat-breakdown ">
                   <span>{stats.deliveredOrders} D</span>
                   <span>{stats.pendingOrders} P</span>
                   <span>{stats.rejectedOrders} R</span>

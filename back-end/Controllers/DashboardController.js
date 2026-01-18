@@ -3,11 +3,12 @@ const Order = require("../Models/Order");
 
 
 exports.getSalesAnalytics = async (req, res) => {
+  const userId = req.user.userId;
   try {
     const [daily, monthly] = await Promise.all([
       // DAILY SALES (Mon–Sun)
       Order.aggregate([
-        { $match: { status: "delivered" } },
+        { $match: { status: "delivered",farmerId: userId } },
         {
           $group: {
             _id: { $dayOfWeek: "$createdAt" },
@@ -19,7 +20,7 @@ exports.getSalesAnalytics = async (req, res) => {
 
       // MONTHLY SALES (Jan–Dec)
       Order.aggregate([
-        { $match: { status: "delivered" } },
+        { $match: { status: "delivered" ,farmerId: userId} },
         {
           $group: {
             _id: { $month: "$createdAt" },
@@ -54,10 +55,11 @@ exports.getSalesAnalytics = async (req, res) => {
 };
 
 exports.getPieAnalytics = async (req, res) => {
+   const userId = req.user.userId;
   try {
     const result = await Order.aggregate([
       // 1️⃣ only delivered orders
-      { $match: { status: "delivered" } },
+      { $match: { status: "delivered",farmerId: userId } },
 
       // 2️⃣ join Product collection
       {

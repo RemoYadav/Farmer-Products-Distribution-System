@@ -231,7 +231,7 @@ exports.updateOrderStatus = async (req, res) => {
         await Activity.create({
           userId: farmerId,
           title: `Order ${order.status}`,
-          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+          message: `We ${order.status} the order of ${order.customerName} (${order.email})!`,
         });
         const product = await Product.findById(order.productId);
 
@@ -285,7 +285,7 @@ exports.updateOrderStatus = async (req, res) => {
         await Activity.create({
           userId: farmerId,
           title: `Order ${order.status}`,
-          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+          message: `We ${order.status} the order of ${order.customerName} (${order.email})!`,
         });
          const productapproved = await Product.findById(order.productId);
 
@@ -318,7 +318,7 @@ exports.updateOrderStatus = async (req, res) => {
         await Activity.create({
           userId: farmerId,
           title: `Order ${order.status}`,
-          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+          message: `We ${order.status} the order of ${order.customerName} (${order.email})!`,
         });
         
         await Notification.create(

@@ -8,35 +8,9 @@ import axios from "axios";
 import {
   Shield,
   Users,
-  User,
-  UserCheck,
-  UserX,
-  TrendingUp,
-  DollarSign,
-  Package,
-  ShoppingBag,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Eye,
-  Ban,
-  Unlock,
-  Activity,
-  BarChart3,
-  Settings,
-  Search,
-  Filter,
 
-  Download,
-  Mail,
-  Phone,
-  Home,
-  MapPin,
-  Calendar,
-  Trash2,
-  Edit,
-  LogOut,
+  Search,
+
 
 } from "lucide-react";
 import "./AdminDashboard.css";
@@ -157,14 +131,14 @@ export default function AdminProducts() {
 
         {/* Search Bar */}
         <div className=" filters-section mt-3" style={{ margin: "20px 0" }}>
-          <div className="search-box">
-                       <Search className="search-icon flex jestify-end" />      
+          <div className="ad-search-box">
+                       <Search className="ad-search-icon" />      
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by product, category, farmer name, or email..."
-            className=" mr-10 ml-10 flex justify-center"
+            className=" mr-10 ml-5 flex justify-center"
             style={{
               width: "100%",
               padding: "10px",

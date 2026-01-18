@@ -50,7 +50,7 @@ export default function FarmerDashboard() {
     setEmail(localStorage.getItem("email"));
   }, [])
 
-
+console.log(monthly)
   // Mock farmer data - In a real app, this would come from authentication
 
 
@@ -119,7 +119,7 @@ export default function FarmerDashboard() {
     });
 
     const data = await res.json();
-    console.log(data)
+
     if (data.success) {
       setActivities(data.data);
     }

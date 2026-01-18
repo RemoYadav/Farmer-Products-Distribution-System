@@ -85,7 +85,7 @@ const AdminUsers = () => {
         }
     };
     const deleteCustomer = async (id, action) => {
-        
+
         if (window.confirm("Are you sure you want to delete this customer?")) {
             setLoading({ id, action });
             await fetch(`${API_BASE_URL}/api/admin/customers/${id}`, { method: "DELETE" });
@@ -94,9 +94,9 @@ const AdminUsers = () => {
         }
     };
     const deleteFarmer = async (id, action) => {
-        
+
         if (window.confirm("Are you sure you want to delete this farmer?")) {
-          setLoading({ id, action });
+            setLoading({ id, action });
             await fetch(`${API_BASE_URL}/api/admin/farmers/${id}`, { method: "DELETE" });
             loadFarmers();
             setLoading({ id: null, action: null });
@@ -105,7 +105,7 @@ const AdminUsers = () => {
 
     // Toggle customer status
     const toggleCustomerStatus = async (id, action) => {
-       setLoading({ id, action });
+        setLoading({ id, action });
         await fetch(`${API_BASE_URL}/api/admin/customers/${id}/status`, { method: "PATCH" });
         loadCustomers();
         setLoading({ id: null, action: null });
@@ -124,13 +124,13 @@ const AdminUsers = () => {
     };
 
     //view order of requested farmer
-    const getOrder = async (id,farmName) => {
+    const getOrder = async (id, farmName) => {
         navigate(`/admin/orders/${id}/${farmName}`);
     };
 
     // Toggle farmer status
     const toggleFarmerStatus = async (id, action) => {
-       setLoading({ id, action });
+        setLoading({ id, action });
         await fetch(`${API_BASE_URL}/api/admin/farmers/${id}/status`, { method: "PATCH" });
         loadFarmers();
         setLoading({ id: null, action: null });
@@ -148,10 +148,12 @@ const AdminUsers = () => {
             return matchesSearch && matchesStatus;
         });
     };
-    const [loading, setLoading] = useState({id: null,
-  action: null});
+    const [loading, setLoading] = useState({
+        id: null,
+        action: null
+    });
 
-   
+
 
 
     if (isReloading) {
@@ -169,9 +171,10 @@ const AdminUsers = () => {
             <AdminHeader />
             {/* Filters */}
             <div className="filters-section mt-3">
-                <div className="search-box">
-                    <Search className="search-icon" />
+                <div className="ad-search-box">
+                    <Search className="ad-search-icon" />
                     <input
+                        className=" mr-10 ml-5 flex justify-center"
                         type="text"
                         placeholder="Search users..."
                         value={searchQuery}
@@ -252,7 +255,7 @@ const AdminUsers = () => {
                                                 <div className=" flex justify-center items-center gap-3">
                                                     <button
                                                         style={{ color: "blue", marginRight: "3px" }}
-                                                        onClick={() =>viewUser(u._id,"view")}
+                                                        onClick={() => viewUser(u._id, "view")}
                                                         disabled={loading.id === u._id && loading.action === "view"}
                                                     >
                                                         {loading.id === u._id && loading.action === "view" ? (
@@ -265,9 +268,9 @@ const AdminUsers = () => {
                                                     </button>
                                                     <button
                                                         style={{ color: u.status === "active" ? "orange" : "green" }}
-                                                        onClick={() => toggleUserStatus(u._id,"toggleUserStatus")}
+                                                        onClick={() => toggleUserStatus(u._id, "toggleUserStatus")}
                                                         disabled={loading.id === u._id && loading.action === "toggleUserStatus"}
-                                                        
+
                                                     >
                                                         {loading.id === u._id && loading.action === "toggleUserStatus" ? (
                                                             <>
@@ -282,9 +285,9 @@ const AdminUsers = () => {
 
                                                     <button
                                                         style={{ color: "red", marginLeft: "" }}
-                                                        onClick={() => deleteUser(u._id,"deleteUser")}
+                                                        onClick={() => deleteUser(u._id, "deleteUser")}
                                                         disabled={loading.id === u._id && loading.action === "deleteUser"}
-                                                        
+
                                                     >
                                                         {loading.id === u._id && loading.action === "deleteUser" ? (
                                                             <>
@@ -333,7 +336,7 @@ const AdminUsers = () => {
                                                 <div className=" flex justify-center items-center gap-3">
                                                     <button
                                                         style={{ color: "blue" }}
-                                                        onClick={() => viewToggle(c._id,"viewToggle")}
+                                                        onClick={() => viewToggle(c._id, "viewToggle")}
                                                         disabled={loading.id === c._id && loading.action === "viewToggle"}
                                                         className=""
                                                     >
@@ -348,7 +351,7 @@ const AdminUsers = () => {
                                                     </button>
                                                     <button
                                                         style={{ color: c.status === "active" ? "orange" : "green" }}
-                                                        onClick={() => toggleCustomerStatus(c._id,"toggleCustomerStatus")}
+                                                        onClick={() => toggleCustomerStatus(c._id, "toggleCustomerStatus")}
                                                         disabled={loading.id === c._id && loading.action === "toggleCustomerStatus"}
                                                         className=""
                                                     >
@@ -364,7 +367,7 @@ const AdminUsers = () => {
 
                                                     <button
                                                         style={{ color: "red", marginLeft: "5px" }}
-                                                        onClick={() => deleteCustomer(c._id,"deleteCustomer")}
+                                                        onClick={() => deleteCustomer(c._id, "deleteCustomer")}
                                                         disabled={loading.id === c._id && loading.action === "deleteCustomer"}
                                                         className=""
                                                     >
@@ -372,9 +375,9 @@ const AdminUsers = () => {
                                                             <>
                                                                 <div className="spinner3" />
                                                             </>
-                                                        ) : (   
-                                            
-                                                        <Trash2 className="icon-md" />
+                                                        ) : (
+
+                                                            <Trash2 className="icon-md" />
                                                         )}
                                                     </button>
                                                 </div>
@@ -417,7 +420,7 @@ const AdminUsers = () => {
                                                 <div className="flex justify-center items-center gap-3">
                                                     <button
                                                         style={{ backgroundColor: "", color: "blue" }}
-                                                        onClick={() => getOrder(f.userId,f.farmName, "viewFarmer")}
+                                                        onClick={() => getOrder(f.userId, f.farmName, "viewFarmer")}
                                                         disabled={loading.id === f._id && loading.action === "viewFarmer"}
                                                         className=""
                                                     >
@@ -429,7 +432,7 @@ const AdminUsers = () => {
                                                             <Eye className="icon-md" />
                                                         )}
                                                     </button>
-                                                     <button
+                                                    <button
                                                         style={{ color: f.status === "active" ? "orange" : "green" }}
                                                         onClick={() => toggleFarmerStatus(f._id, "toggleFarmerStatus")}
                                                         disabled={loading.id === f._id && loading.action === "toggleFarmerStatus"}
@@ -438,7 +441,7 @@ const AdminUsers = () => {
                                                         {loading.id === f._id && loading.action === "toggleFarmerStatus" ? (
                                                             <>
                                                                 <div className="spinner3" />
-                                                                
+
                                                             </>
                                                         ) : (
                                                             f.status === "active" ? <Ban className="icon-md" /> : <Zap className="icon-md" />
@@ -446,7 +449,7 @@ const AdminUsers = () => {
                                                     </button>
 
                                                     <button
-                                                        style={{ color: "red",}}
+                                                        style={{ color: "red", }}
                                                         onClick={() => deleteFarmer(f._id, "deleteFarmer")}
                                                         disabled={loading.id === f._id && loading.action === "deleteFarmer"}
                                                         className=""
@@ -456,7 +459,7 @@ const AdminUsers = () => {
                                                                 <div className="spinner3" />
                                                             </>
                                                         ) : (
-                                                        <Trash2 className="icon-md" />
+                                                            <Trash2 className="icon-md" />
                                                         )}
                                                     </button>
 

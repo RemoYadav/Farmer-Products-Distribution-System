@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { handleSuccess, handleError } from "../../util"
@@ -22,6 +22,7 @@ import "./AdminDashboard"
 const Header = () => {
 
     const location = useLocation();
+    const menuRef = useRef(null);
 
     const navigate = useNavigate();
     const { logOut } = useAuth()
@@ -105,10 +106,26 @@ const Header = () => {
 
         // fetchProfile();
     }, [token, API_BASE_URL]);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target)
+            ) {
+                setShowUserMenu(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div>
-            <div className="admin-header">
+            <div className="admin-header ">
                 <div className="admin-header-content">
                     <div className="admin-header-left">
                         <img
@@ -147,12 +164,12 @@ const Header = () => {
                         Orders
                     </button> */}
                         <button
-                        className={`ad-tab-btn ${activeNavigation() === "products" ? "active" : ""}`}
-                        onClick={() => navigate("/admin/products")}
-                    >
-                        <Package className="tab-icon" />
-                        Products
-                    </button>
+                            className={`ad-tab-btn ${activeNavigation() === "products" ? "active" : ""}`}
+                            onClick={() => navigate("/admin/products")}
+                        >
+                            <Package className="tab-icon" />
+                            Products
+                        </button>
                         <button
                             className={`ad-tab-btn ${activeNavigation() === "security" ? "active" : ""}`}
                             onClick={() => navigate("/security/logs")}
@@ -180,7 +197,7 @@ const Header = () => {
                             <p className="user-name">Administrator</p>
                             <p id="user-role">Super Admin</p>
                         </div>
-                        <div className="user-menu">
+                        <div className="user-menu " ref={menuRef}>
                             <button
                                 className="menu-toggle"
                                 onClick={() => setShowUserMenu(!showUserMenu)}

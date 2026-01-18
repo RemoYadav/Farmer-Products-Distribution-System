@@ -246,7 +246,7 @@ export default function PlaceOrders() {
           body: JSON.stringify(payload),
         });
         const result = await res.json();
-        console.log(result)
+      
         const { success, message } = result;
         if (success) {
           handleSuccess(message);
