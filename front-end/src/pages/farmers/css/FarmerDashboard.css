@@ -1,4 +1,5 @@
 .dashboard {
+  width: 100vw;
   min-height: 100vh;
   padding: 30px;
   background: linear-gradient(135deg, #eafaf1, #f4fdf8);
