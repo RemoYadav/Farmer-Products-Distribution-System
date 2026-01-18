@@ -177,7 +177,7 @@ const FarmerOrders = () => {
         );
     }
     return (
-        <div>
+        <div className="">
             <div>
                 <FarmerHeader />
             </div>

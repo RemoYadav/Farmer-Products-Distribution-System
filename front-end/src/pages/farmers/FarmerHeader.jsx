@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import { useProfile } from "../../context/ProfileContext.jsx"
 import { useAuth } from "../../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import {handleSuccess,handleError} from "../../util"
+import { handleSuccess, handleError } from "../../util"
 import { useNotifications } from "../../context/NotificationContext";
 import NotificationDrawer from "../../components/NotificationDrawer";
 import Profile from "./Profile";
@@ -25,6 +25,7 @@ const FarmerHeader = (user) => {
   const { count, open, setOpen, fetchNotifications } = useNotifications();
   const [openProfile, setOpenProfile] = useState(false);
   const [animate, setAnimate] = useState(false)
+  const [mobileMenuOpen,setMobileMenuOpen] = useState()
   const toggleProfile = () => setOpenProfile(prev => !prev);
   const toggle = () => {
     setOpen(!open);
@@ -93,7 +94,7 @@ const FarmerHeader = (user) => {
         }
       } catch (err) {
         console.error("Profile fetch failed", err);
-       handleError("Somthing went wrong on fething profile")
+        handleError("Somthing went wrong on fething profile")
       }
     };
 
@@ -101,7 +102,7 @@ const FarmerHeader = (user) => {
   }, [token, API_BASE_URL]);
 
   return (
-    <div>
+    <div className="">
       <header className="">
         <div className="header-content">
           <div className="header-left">
@@ -181,7 +182,7 @@ const FarmerHeader = (user) => {
                 </div>
                 {showUserMenu && (
                   <div className="menu-content">
-                    <p className= {`menu-item btn-profile ${activeNavigation() === "profile" ? "active" : ""} `} onClick={() => navigate("/farmer/myprofile")}>
+                    <p className={`menu-item btn-profile ${activeNavigation() === "profile" ? "active" : ""} `} onClick={() => navigate("/farmer/myprofile")}>
                       <User className="icon-sm" />
                       Profile</p>
                     <p className="menu-item btn-settings">
@@ -196,11 +197,39 @@ const FarmerHeader = (user) => {
                     </button>
                   </div>
                 )}
+                <button
+                  className="md:hidden"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  ☰
+                </button>
               </div>
             </div>
           </div>
         </div>
-         {/* <UserProfilePanel
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t">
+            {[
+              { name: "Home", path: "/farmer/dashboard" },
+              { name: "My Info", path: "/farmer/profile" },
+              { name: "Orders", path: "/farmer/orders" },
+              { name: "Products", path: "/farmer/products" },
+              { name: "About", path: "/farmer/about" },
+            ].map(tab => (
+              <button
+                key={tab.name}
+                onClick={() => {
+                  navigate(tab.path);
+                  setMobileMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-3 border-b text-sm"
+              >
+                {tab.name}
+              </button>
+            ))}
+          </div>
+        )}
+        {/* <UserProfilePanel
         user={user}
         open={openProfile}
         onClose={() => setOpenProfile(false)}

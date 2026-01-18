@@ -299,7 +299,7 @@ useEffect(() => {
             <h2 className="ad-section-title">System Overview</h2>
 
             {/* Statistics Grid */}
-            <div className="stats-grid">
+            <div className="stats-grid ">
               <div className="ad-stat-card large">
                 <div className="stat-header">
                   <Users className="stat-icon blue" />
