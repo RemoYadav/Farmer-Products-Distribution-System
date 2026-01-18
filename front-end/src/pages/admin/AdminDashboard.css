@@ -118,7 +118,6 @@
 .ad-tab-btn {
   padding: 0.75rem 1.5rem;
   background: transparent;
-  color: #666;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -262,27 +261,39 @@
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
-
-.stat-card {
+.ad-stat-card {
+   background: white;
+   width: auto;
+   height:70px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.ad-stat-card {
+  display: flex;
   background: white;
-  padding: 1rem;
+  padding: 0.3rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.2s;
 }
 
-.stat-card:hover {
+.ad-stat-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-.stat-card.large {
-  grid-column: span 2;
+.ad-stat-card.large {
+  /* grid-column: span 2; */
   background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
   color: white;
 }
 
-.stat-card.alert {
+.ad-stat-card.alert {
   border: 2px solid #d32f2f;
   background: #ffebee;
 }
@@ -337,11 +348,11 @@
   font-weight: 500;
 }
 
-.stat-card.large .stat-label {
+.ad-stat-card.large .stat-label {
   color: rgba(255, 255, 255, 0.9);
 }
 
-.stat-card.alert .stat-label {
+.ad-stat-card.alert .stat-label {
   color: #d32f2f;
 }
 
@@ -352,11 +363,11 @@
   margin-bottom: 0.5rem;
 }
 
-.stat-card.large .stat-value {
+.ad-stat-card.large .stat-value {
   color: white;
 }
 
-.stat-card.alert .stat-value {
+.ad-stat-card.alert .stat-value {
   color: #d32f2f;
 }
 
@@ -369,7 +380,7 @@
 span{
   display: flex;
 }
-.stat-card.large .stat-details {
+.ad-stat-card.large .stat-details {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -378,7 +389,7 @@ span{
   color: #999;
 }
 
-.stat-card.large .stat-breakdown {
+.ad-stat-card.large .stat-breakdown {
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -500,7 +511,7 @@ span{
   width: 1.25rem;
   height: 1.25rem;
   color: #999;
-}
+
 
 .search-box input {
   width: 100%;
@@ -1086,14 +1097,14 @@ span{
   gap: 1rem;
 }
 
-/* .detail-item {
+.detail-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
   background: #f5f5f5;
   border-radius: 8px;
-} */
+}
 
 .detail-icon {
   width: 1.5rem;
@@ -1220,7 +1231,7 @@ span{
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
-  .stat-card.large {
+  .ad-stat-card.large {
     grid-column: span 1;
   }
 }

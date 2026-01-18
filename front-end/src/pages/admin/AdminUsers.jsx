@@ -180,15 +180,16 @@ const AdminUsers = () => {
                 </div>
 
                 <div className="filter-buttons">
-                    <select
+                    {/* <select
                         value={filterUserType}
                         onChange={(e) => setFilterUserType(e.target.value)}
                         className="filter-select"
                     >
                         <option value="all">All Types</option>
+                        <option value="users">Users</option>
                         <option value="farmer">Farmers</option>
                         <option value="customer">Customers</option>
-                    </select>
+                    </select> */}
 
                     <select
                         value={filterStatus}
@@ -240,7 +241,7 @@ const AdminUsers = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterUserType !== "users" &&
+                                {filterUserType !== "farmer" && filterUserType !== "customer" &&
                                     filterUsers(users).map((u, index) => (
                                         <tr key={u._id}>
                                             <td>{index + 1}</td>

@@ -373,7 +373,11 @@
 .stat-content {
   flex: 1;
 }
-
+.viewed{
+  text-decoration: underline green  ;
+  text-underline-offset: 4px;
+  
+}
 .stat-label {
   margin: 0;
   color: #666;

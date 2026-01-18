@@ -189,9 +189,9 @@ const Header = () => {
                             </button>
                             {showUserMenu && (
                                 <div className="menu-content">
-                                    <p className="menu-item btn-profile" onClick={() => navigate("/page/admin/profile")}>
+                                    {/* <p className="menu-item btn-profile" onClick={() => navigate("/page/admin/profile")}>
                                         <User className="icon-sm" />
-                                        Profile</p>
+                                        Profile</p> */}
                                     <p className="menu-item btn-settings">
                                         <Settings className="icon-sm" />
                                         Settings</p>

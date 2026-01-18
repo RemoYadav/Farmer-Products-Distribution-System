@@ -313,7 +313,7 @@ const FarmerOrders = () => {
                                         {order.status}
                                     </td>
 
-                                    <td className="space-x-2">
+                                    <td className="space-x-2 flex justify-center">
                                         {order.status === "pending" && (
                                             <>
                                                 <button
@@ -348,9 +348,9 @@ const FarmerOrders = () => {
                                         {order.status === "delivered" && (
                                             <button
                                                 onClick={() => handleOrderDetailClick(order)}
-                                                className="bg-[#2e7d32] text-white px-2 py-1 rounded-md"
+                                                className="w-35 m-2 bg-green-700 text-white  rounded-md"
                                             >
-                                                <Eye className="icon-sm" />
+                                                View Detail
                                             </button>
                                         )}
 

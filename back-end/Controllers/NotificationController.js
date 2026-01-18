@@ -1,43 +1,76 @@
-const Notification =require( "../Models/Notification.js");
+const Notification = require("../Models/Notification.js");
 
 exports.getNotificationCount = async (req, res) => {
   try {
-    const userId = req.user.userId; // logged-in farmer id
+    const { userId, role } = req.user;
 
-    const count = await Notification.countDocuments({
-      receiverId: userId,
-      isRead: false,
+    let filter = { isRead: false };
+
+    // Normal users → only their notifications
+    if (role !== "admin") {
+      filter.receiverId = userId;
+    }
+
+    // Admin → all unread notifications
+    const count = await Notification.countDocuments(filter);
+
+    res.json({
+      success: true,
+      count
     });
 
-    res.json({ success: true, count });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Error fetching notification count:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
+
+
 exports.getNotifications = async (req, res) => {
   try {
-    const userId = req.user.id; // logged-in user's id
+    const { userId, role } = req.user;
 
-    // Get last 10 notifications for this user
-    const notifications = await Notification.find({ receiverId: userId })
-      .populate("senderId", "name role") // optional: populate sender's name & role
+    let filter = {};
+
+    // Admin can see all notifications
+    if (role !== "admin") {
+      filter.receiverId = userId;
+    }
+
+    const notifications = await Notification.find(filter)
+      .populate("senderId", "name role")
       .sort({ createdAt: -1 })
       .limit(10);
 
-    res.json({ success: true, notifications });
+    res.json({
+      success: true,
+      notifications
+    });
+
   } catch (err) {
     console.error("Error fetching notifications:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
+
 exports.markAsRead = async (req, res) => {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.userId;
 
-  await Notification.updateMany(
-    { userId, isRead: false },
-    { isRead: true }
-  );
+    await Notification.updateMany(
+      { receiverId: userId, isRead: false },
+      { isRead: true }
+    );
 
-  res.json({ success: true });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
 };

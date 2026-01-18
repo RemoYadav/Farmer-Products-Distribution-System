@@ -55,6 +55,7 @@ const FarmerHeader = (user) => {
     if (location.pathname.includes("/farmer/orders")) return "orders";
     if (location.pathname.includes("/farmer/products")) return "products";
     if (location.pathname.includes("/farmer/profile")) return "profile";
+    if (location.pathname.includes("/farmer/myprofile")) return "profile";
     if (location.pathname.includes("/farmer/about")) return "about";
     return "";
   };
@@ -124,7 +125,7 @@ const FarmerHeader = (user) => {
               Home
             </button>
             <button
-              className={`tab-btn ${activeNavigation() === "my-info" ? "active" : ""}`}
+              className={`tab-btn ${activeNavigation() === "profile" ? "active" : ""}`}
               onClick={() => navigate("/farmer/profile")}
             >
               <BarChart3 className="tab-icon" />
@@ -180,7 +181,7 @@ const FarmerHeader = (user) => {
                 </div>
                 {showUserMenu && (
                   <div className="menu-content">
-                    <p className="menu-item btn-profile" onClick={toggleProfile}>
+                    <p className= {`menu-item btn-profile ${activeNavigation() === "profile" ? "active" : ""} `} onClick={() => navigate("/farmer/myprofile")}>
                       <User className="icon-sm" />
                       Profile</p>
                     <p className="menu-item btn-settings">

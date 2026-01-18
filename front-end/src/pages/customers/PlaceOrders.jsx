@@ -99,21 +99,21 @@ export default function PlaceOrders() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!orderData.customerName) {
+    if (!customerName) {
       newErrors.customerName = "Name is required";
     }
 
-    if (!orderData.email) {
+    if (!email) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(orderData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format";
     }
 
-    if (!orderData.phone) {
+    if (!phone) {
       newErrors.phone = "Phone number is required";
     }
 
-    if (!orderData.location) {
+    if (!location) {
       newErrors.location = "Location is required";
     }
 

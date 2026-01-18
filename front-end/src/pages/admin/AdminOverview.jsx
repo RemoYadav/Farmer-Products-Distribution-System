@@ -290,7 +290,7 @@ useEffect(() => {
     <div className="admin-dashboard">
       {/* Header */}
       <Header />
-      <div>
+      <div className="">
 
 
         {/* Overview Tab */}
@@ -300,7 +300,7 @@ useEffect(() => {
 
             {/* Statistics Grid */}
             <div className="stats-grid">
-              <div className="stat-card large">
+              <div className="ad-stat-card large">
                 <div className="stat-header">
                   <Users className="stat-icon blue" />
                   <span className="stat-label">Total Users</span>
@@ -312,7 +312,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <UserCheck className="stat-icon green" />
                   <span className="stat-label">Total Farmers</span>
@@ -324,7 +324,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <UserCheck className="stat-icon green" />
                   <span className="stat-label">Total Customers</span>
@@ -338,7 +338,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              {/* <div className="ad-stat-card">
                 <div className="stat-header">
                   <Clock className="stat-icon yellow" />
                   <span className="stat-label">Pending Approvals</span>
@@ -355,9 +355,9 @@ useEffect(() => {
                     Review Now
                   </button>
                 )}
-              </div>
+              </div> */}
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <ShoppingBag className="stat-icon purple" />
                   <span className="stat-label">Total Orders</span>
@@ -370,7 +370,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <Package className="stat-icon teal" />
                   <span className="stat-label">Products Listed</span>
@@ -383,7 +383,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <span className="stat-icon green"> रु</span>
                   <span className="stat-label">Total Revenue</span>
@@ -391,7 +391,7 @@ useEffect(() => {
                 <div className="stat-value ">रु-{stats.totalRevenue}</div>
               </div>
 
-              <div className="stat-card alert">
+              <div className="ad-stat-card alert">
                 <div className="stat-header">
                   <AlertCircle className="stat-icon red" />
                   <span className="stat-label">Security Issues</span>
@@ -407,7 +407,7 @@ useEffect(() => {
                 )}
               </div>
 
-              <div className="stat-card">
+              <div className="ad-stat-card">
                 <div className="stat-header">
                   <TrendingUp className="stat-icon blue" />
                   <span className="stat-label">Growth Rate</span>

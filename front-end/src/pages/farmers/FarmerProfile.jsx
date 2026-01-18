@@ -6,6 +6,7 @@ import {
 
   Edit,
 } from "lucide-react";
+import "./css/FarmerProfile.css"
 import { useNavigate } from "react-router-dom";
 // import { toast } from "sonner@2.0.3";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,24 +17,15 @@ export default function FarmerProfile() {
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(true); 
   const [imageFile, setImageFile] = useState(null);
-
+const [profileShow,setProfileShow] =useState(true)
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   }, [])
   const navigate = useNavigate();
 
- 
-  // Mock farmer data - In a real app, this would come from authentication
-
-
-  // Mock customer requests data
-
   const [profile, setProfile] = useState(null);
 
   const [previewImage, setPreviewImage] = useState("");
-
-  // const inputcss = "pl-10 file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base bg-input-background transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-  const [errors, setErrors] = useState({});
 
   const updateProfileImage = async () => {
     if (!imageFile) return;
@@ -44,7 +36,7 @@ export default function FarmerProfile() {
     const res = await fetch(`${API_BASE_URL}/api/farmer/profile`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${token}`, // ❗ DO NOT set Content-Type
+        Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
@@ -104,12 +96,21 @@ if (isLoading) {
         <FarmerHeader/>
       </div>
       
-      <div className="relative min-h-screen w-full flex items-center justify-center">
-        <div className="profile-view-container">
+      <div className="relative min-h-screen w-full flex  justify-center">
+        {
+          profileShow && (
+            <div className="farmer-profile-view-container">
+          
           <h2 className="profile-title">My Information</h2>
 
-          <div className="profile-card">
+          <div className="fm-profile-card ">
             {/* Profile Image */}
+            <button
+                            className="modal-close"
+                            onClick={() => setProfileShow(false)}
+                        >
+                            ×
+                        </button>
             <div className="profile-image-box">
               <img
                 src={ "/default.jpg"}
@@ -188,6 +189,8 @@ if (isLoading) {
 
         </div>
 
+          )
+        }
       </div>
 
 

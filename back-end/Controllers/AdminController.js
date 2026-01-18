@@ -3,6 +3,7 @@ const Customer = require("../Models/Customer");
 const Farmer = require("../Models/Farmer");
 const Order = require("../Models/Order");
 const User = require("../Models/User");
+const Activity = require("../Models/Activity")
 const Product = require("../Models/Product");
 const nodeMailer = require("nodemailer");
 const mongoose = require("mongoose");
@@ -23,8 +24,8 @@ const toggleUserStatus = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
- if(user.role==="admin"){
-      return  res.status(403).json({ message: "Cannot change status of admin user" });
+    if (user.role === "admin") {
+      return res.status(403).json({ message: "Cannot change status of admin user" });
     }
     user.status = user.status === "active" ? "suspended" : "active";
     user.is_active = user.status === "active";
@@ -39,7 +40,12 @@ const toggleUserStatus = async (req, res) => {
       user: user._id,
       message,
     });
+    await Activity.create({
+      userId: user.userId,
+      title: `${user.status}`,
+      message: `The ${user.status} the ${user.email}`,
 
+    });
     // 🔔 Emit notification
     const io = req.app.get("io");
     io.to(user._id.toString()).emit("notification", {
@@ -47,12 +53,12 @@ const toggleUserStatus = async (req, res) => {
       status: user.status,
     });
     const transporter = nodeMailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: user.email,
@@ -190,26 +196,26 @@ const toggleFarmerStatus = async (req, res) => {
 const getAdminStats = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
-    const suspendUsers = await User.countDocuments({status:"suspended"});
-    const activeUsers = await User.countDocuments({status:"active"});
+    const suspendUsers = await User.countDocuments({ status: "suspended" });
+    const activeUsers = await User.countDocuments({ status: "active" });
     const totalCustomers = await Customer.countDocuments();
     const activeCustomers = await Customer.countDocuments({ status: "active" });
-    const suspendCustomers = await Customer.countDocuments({status:"suspended"});
+    const suspendCustomers = await Customer.countDocuments({ status: "suspended" });
 
     const totalFarmers = await Farmer.countDocuments();
-    const suspendFarmers = await Farmer.countDocuments({status:"suspended"});
+    const suspendFarmers = await Farmer.countDocuments({ status: "suspended" });
     const activeFarmers = await Farmer.countDocuments({ status: "active" });
 
 
     const totalOrders = await Order.countDocuments();
     const pendingOrders = await Order.countDocuments({ status: "pending" });
-    const deliveredOrders = await Order.countDocuments({ status: "delivered"})
-    const rejectedOrders = await Order.countDocuments({ status: "rejected"})
+    const deliveredOrders = await Order.countDocuments({ status: "delivered" })
+    const rejectedOrders = await Order.countDocuments({ status: "rejected" })
 
     const totalProducts = await Product.countDocuments();
-    const activeProducts = await Product.countDocuments({access:"allowed"});
-    const suspendProducts = await Product.countDocuments({access:"denied"});
-  
+    const activeProducts = await Product.countDocuments({ access: "allowed" });
+    const suspendProducts = await Product.countDocuments({ access: "denied" });
+
     const totalRevenueAgg = await Order.aggregate([
       { $match: { status: "delivered" } },
       { $group: { _id: null, total: { $sum: "$totalPrice" } } }

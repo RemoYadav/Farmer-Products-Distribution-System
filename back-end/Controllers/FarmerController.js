@@ -31,7 +31,7 @@ exports.saveProfile = async (req, res) => {
     if (!farmer) {
       // Create new farmer profile
       farmer = new Farmer({
-        userId: userId,
+        userId,
         farmName,
         fullName,
         email: email,

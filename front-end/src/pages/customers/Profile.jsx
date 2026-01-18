@@ -137,6 +137,7 @@ export default function Profile() {
         setProfile(result.profile);
         setFormData({ ...result.profile });
         setPreviewImage(result.profile.image || "");
+        fetchProfile()
       } else {
         toast.error(result.message || "Save failed");
       }

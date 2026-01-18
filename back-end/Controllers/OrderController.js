@@ -2,7 +2,8 @@ const Order = require("../Models/Order");
 const generateOrderNumber = require("../utils/generateOrderNumber");
 const Product = require("../Models/Product");
 const Notification = require("../Models/Notification.js");
-
+const Activity = require("../Models/Activity")
+const farmer = require("../Models/Farmer")
 exports.createOrder = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -194,6 +195,7 @@ const mongoose = require("mongoose");
 
 exports.updateOrderStatus = async (req, res) => {
   const session = await mongoose.startSession();
+  let responseMessage = "";
 
   try {
     await session.withTransaction(async () => {
@@ -201,25 +203,22 @@ exports.updateOrderStatus = async (req, res) => {
       const { status, rejectedReason } = req.body;
       const farmerId = req.user.userId;
 
-      // ✅ Allow all valid statuses
       if (!["approved", "rejected", "delivered"].includes(status)) {
         throw new Error("Invalid status");
       }
 
-      // 🔎 Find order
       const order = await Order.findOne({
         orderNumber,
         farmerId
       }).session(session);
-
+      const product = await Product.findById(order.productId);
       if (!order) throw new Error("Order not found");
 
-      // ❌ Prevent re-processing
       if (order.status === "rejected" || order.status === "delivered") {
         throw new Error("Order already finalized");
       }
 
-      // 🟥 REJECT
+      // ---------- REJECT ----------
       if (status === "rejected") {
         if (order.status !== "pending") {
           throw new Error("Only pending orders can be rejected");
@@ -229,40 +228,42 @@ exports.updateOrderStatus = async (req, res) => {
         order.rejectedAt = new Date();
         order.rejectionReason = rejectedReason || "No reason provided";
         await order.save({ session });
+        await Activity.create({
+          userId: farmerId,
+          title: `Order ${order.status}`,
+          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+        });
+        const product = await Product.findById(order.productId);
+
+        // Notification to CUSTOMER
         await Notification.create(
           [
             {
               senderId: farmerId,
               receiverId: order.customerId,
               type: "ORDER_REJECTED",
-              message: `Your order for ${product.name} was rejected`,
-              reason: order.rejectionReason,
-              orderNumber: order.orderNumber
+              message: `Your order #${product.productName} has been rejected. Reason: ${order.rejectionReason}`,
             }
           ],
           { session }
         );
+
         responseMessage = "Order rejected successfully";
         return;
       }
 
-      // 🟩 APPROVE (reduce stock)
-      // 🟩 APPROVE (reduce stock)
+      // ---------- APPROVE ----------
       if (status === "approved") {
         if (order.status !== "pending") {
           throw new Error("Only pending orders can be approved");
         }
 
-        // 🔎 Get product details
         const product = await Product.findById(order.productId)
-          .select("name")
+          .select("name stock farmerId")
           .session(session);
 
-        if (!product) {
-          throw new Error("Product not found");
-        }
+        if (!product) throw new Error("Product not found");
 
-        // 🔻 Reduce stock
         const result = await Product.updateOne(
           {
             _id: order.productId,
@@ -278,21 +279,23 @@ exports.updateOrderStatus = async (req, res) => {
           throw new Error("Insufficient stock");
         }
 
-        // ✅ Update order
         order.status = "approved";
         order.approvedAt = new Date();
         await order.save({ session });
+        await Activity.create({
+          userId: farmerId,
+          title: `Order ${order.status}`,
+          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+        });
+         const productapproved = await Product.findById(order.productId);
 
-        // 🔔 Create notification for CUSTOMER
         await Notification.create(
           [
             {
-              senderId: farmerId,          // farmer
-              receiverId: order.customerId, // customer
+              senderId: farmerId,
+              receiverId: order.customerId,
               type: "ORDER_APPROVED",
-              message: `Your order for ${product.name} has been approved`,
-              orderNumber: order.orderNumber,
-              productId: order.productId
+              message: `Your order ${productapproved.productName} has been approved.`,
             }
           ],
           { session }
@@ -302,8 +305,7 @@ exports.updateOrderStatus = async (req, res) => {
         return;
       }
 
-
-      // 🚚 DELIVER (NO stock change)
+      // ---------- DELIVER ----------
       if (status === "delivered") {
         if (order.status !== "approved") {
           throw new Error("Only approved orders can be delivered");
@@ -312,13 +314,31 @@ exports.updateOrderStatus = async (req, res) => {
         order.status = "delivered";
         order.deliveredAt = new Date();
         await order.save({ session });
+
+        await Activity.create({
+          userId: farmerId,
+          title: `Order ${order.status}`,
+          message: `We ${order.status} the order by ${order.customerName} (${order.email})!`,
+        });
+        
+        await Notification.create(
+          [
+            {
+              senderId: farmerId,
+              receiverId: order.customerId,
+              type: "ORDER_DELIVERED",
+              message: `Your order ${product.productName} has been delivered. Thank you!`,
+            }
+          ],
+          { session }
+        );
+
         responseMessage = "Order delivered successfully";
         return;
       }
     });
 
     res.json({ message: responseMessage });
-
   } catch (err) {
     console.error("Order status update error:", err);
     res.status(400).json({ message: err.message });

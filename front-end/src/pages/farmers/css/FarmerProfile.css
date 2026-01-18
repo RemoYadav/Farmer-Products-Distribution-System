@@ -1,0 +1,58 @@
+.farmer-profile-view-container {
+  max-width: 900px;
+  /* margin: 40px auto; */
+  margin-top: 0;
+  
+}
+
+.profile-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.fm-profile-card {
+    position: relative;
+  display: flex;
+  align-items: column;
+  gap: 30px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  padding-top: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.profile-image-box img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #16a34a;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.detail-row {
+  display: flex;
+  /* justify-content: space-between; */
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.label {
+  font-weight: 600;
+  color: #555;
+}
+
+.value {
+  color: #111;
+}
+
+.bio-text {
+  margin-top: 8px;
+  color: #444;
+  line-height: 1.5;
+}

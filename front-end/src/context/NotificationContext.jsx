@@ -11,19 +11,7 @@ export const NotificationProvider = ({ children }) => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem("token");
 
-  // 🔔 fetch notification count
-  const fetchCount = async () => {
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/api/notifications/count`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setCount(res.data.count);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  // 📩 fetch notifications list
+  // fetch notifications list
   const fetchNotifications = async () => {
     try {
       const res = await axios.get(
@@ -36,19 +24,38 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // 👁 mark all as read
+  // fetch notification count
+  const fetchCount = async () => {
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/api/notifications/count`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCount(res.data.count);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  // mark all as read + refresh
   const markAllRead = async () => {
     await axios.put(
       `${API_BASE_URL}/api/notifications/read`,
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
     setCount(0);
+    fetchNotifications(); // refresh list
   };
 
   useEffect(() => {
     fetchCount();
-    const interval = setInterval(fetchCount, 5000); // auto refresh
+    const interval = setInterval(fetchCount, 5000);
     return () => clearInterval(interval);
   }, [token, API_BASE_URL]);
 

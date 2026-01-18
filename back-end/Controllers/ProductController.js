@@ -65,8 +65,13 @@ exports.getProducts = async (req, res) => {
     if ((role === "admin")) {
       const products = await Product.find().sort({ createdAt: -1 });
       res.status(200).json(products);
-    } else {
-      const products = await Product.find({ access: "allowed" }).sort({ createdAt: -1 });
+    } if ((role ==="customer")){
+      const products = await Product.find({  access: "allowed" }).sort({ createdAt: -1 });
+
+      res.status(200).json(products);
+    }
+    if ((role ==="farmer")){
+      const products = await Product.find({ farmerId:userId, access: "allowed" }).sort({ createdAt: -1 });
 
       res.status(200).json(products);
     }
@@ -94,8 +99,9 @@ exports.getPlaceProductsOrder = async (req, res) => {
  */
 exports.updateProduct = async (req, res) => {
   try {
-     const { email, userId, role } = req.user;
+    const { userId } = req.user;
     const { id } = req.params;
+
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -103,12 +109,16 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    if (!req.body) {
-      return res.status(400).json({
+    // Find existing product first
+    const oldProduct = await Product.findById(id);
+    if (!oldProduct) {
+      return res.status(404).json({
         success: false,
-        message: "Form data is missing",
+        message: "Product not found",
       });
     }
+
+    // Build update data
     const updateData = {
       productName: req.body.productName,
       category: req.body.category,
@@ -118,30 +128,46 @@ exports.updateProduct = async (req, res) => {
       description: req.body.description,
     };
 
-    // ✅ If new image uploaded
     if (req.file) {
-      updateData.image = req.file.path; // or filename based on your setup
+      updateData.image = req.file.path;
     }
 
+    // Remove undefined fields from updateData
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] === undefined) delete updateData[key];
+    });
+
+    // If nothing to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No data provided to update",
+      });
+    }
+
+    // Update product
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       updateData,
       { new: true }
     );
 
-    if (!updatedProduct) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
+    // Compare and log only changed fields
+    const changes = [];
+    for (const key of Object.keys(updateData)) {
+      if (oldProduct[key] !== updatedProduct[key]) {
+        changes.push(`${key}: "${oldProduct[key]}" → "${updatedProduct[key]}"`);
+      }
+    }
+
+    if (changes.length > 0) {
+      await Activity.create({
+        userId: userId,
+        title: "Product Updated",
+        message: `${updatedProduct.productName} Updated fields: ${changes.join(", ")}`,
       });
     }
-    
-      await Activity.create({
-        userId:userId ,
-        title :"Product Updates" ,
-        message :`The product name update of ${updatedProduct.productName}`,
-        
-      });
+
     res.status(200).json({
       success: true,
       message: "Product updated successfully",
@@ -156,6 +182,7 @@ exports.updateProduct = async (req, res) => {
     });
   }
 };
+
 
 
 /**

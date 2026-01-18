@@ -38,7 +38,6 @@ const notificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["ORDER_PLACED", "ORDER_STATUS", "PRODUCT_UPDATE"],
     required: true
   },
   message: {

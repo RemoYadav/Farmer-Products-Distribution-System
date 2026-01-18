@@ -75,52 +75,63 @@ export default function Products() {
   });
 
   // Load products from localStorage on mount
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
 
+  const fetchProducts = async () => {
+  setIsLoading(true);
 
-        // await new Promise(resolve => setTimeout(resolve, 50000)); // 👈 TEST delay
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.message || "Failed to load products");
+    }
 
-        const res = await fetch(`${API_BASE_URL}/api/products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          throw new Error("Failed to load products");
-        }
-        const data = await res.json();
+    const data = await res.json();
 
-        if (res.ok) {
-          if (!Array.isArray(data) || data.length === 0) {
-            throw new Error("No products found");
-          }
-          const allowedProducts = data.map(p => ({
-            _id: p._id,
-            productName: p.productName,
-            category: p.category,
-            price: p.price,
-            unit: p.unit,
-            stock: p.stock,
-            description: p.description,
-            imagePreview: p.image ? `${API_BASE_URL}/${p.image}` : null,
-          }));
+    // Handle empty products safely
+    if (!Array.isArray(data) || data.length === 0) {
+      setProducts([]);
+      setFilteredProducts([]);
+      return;
+    }
 
-          setProducts(allowedProducts);
-          setFilteredProducts(allowedProducts);
-          setIsLoading(false)
-        }
-      } catch (error) {
-        handleError("Server not responding. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const allowedProducts = data.map(p => ({
+      _id: p._id,
+      productName: p.productName,
+      category: p.category,
+      price: p.price,
+      unit: p.unit,
+      stock: p.stock,
+      description: p.description,
+      imagePreview: p.image ? `${API_BASE_URL}/${p.image}` : null,
+    }));
 
-    fetchProducts();
-  }, []); // ✅ EMPTY dependency array
+    setProducts(allowedProducts);
+    setFilteredProducts(allowedProducts);
+
+  } catch (error) {
+    console.error("Fetch products error:", error.message);
+
+    // Show correct message
+    handleError(
+      error.message.includes("Failed to fetch")
+        ? "Server not responding. Please try again later."
+        : error.message
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchProducts();
+}, []);
+ // ✅ EMPTY dependency array
 
 
 
@@ -265,7 +276,7 @@ export default function Products() {
       setProducts(prev => [...prev, data.data]);
       toast.success(data.message);
 
-
+      fetchProducts();
       resetForm();
       setEditingProduct(null);
       setShowAddForm(false);
@@ -292,6 +303,7 @@ export default function Products() {
 
 
       resetForm();
+       fetchProducts();
       setEditingProduct(null);
       setShowAddForm(false);
 
@@ -318,7 +330,9 @@ export default function Products() {
 
     setEditingProduct(product); // product must have _id
     setShowAddForm(true);
+    
   };
+
 
   const handleDeleteProduct = async (_id) => {
     try {
@@ -334,8 +348,8 @@ export default function Products() {
       const data = await res.json();
       if (data.success) {
         handleSuccess(data.message);
-        setProducts(prev => prev.filter(p => p && p._id !== _id));
-
+        // setProducts(prev => prev.filter(p => p && p._id !== _id));
+        fetchProducts();
         return;
       }
 
@@ -372,6 +386,10 @@ export default function Products() {
 
     setFilteredProducts(filtered);
   };
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery]);
+
   // const filteredProducts = products.filter((product) => {
   //   if (!product) return false;
 
@@ -409,7 +427,7 @@ export default function Products() {
               <div className="pm-header">
 
                 <div className="pm-header-content ">
-                  <div className="product-search-box ">
+                  <div className="product-search-box  ">
                     <Search className="product-search-icon " />
                     <input
                       type="text"

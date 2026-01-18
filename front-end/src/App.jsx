@@ -14,6 +14,7 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import AdminProducts from "./pages/admin/AdminProducts"
 import FarmerDashboard from "./pages/farmers/FarmerDashboard";
 import Profile from "./pages/farmers/Profile";
+import FarmerProfile from "./pages/farmers/FarmerProfile"
 import Products from "./pages/farmers/Products";
 import About from "./pages/farmers/About";
 import FarmerOrders from "./pages/farmers/FarmerOrders";
@@ -76,6 +77,7 @@ const App = () => {
           <Route path="/farmer/products" element={<Products />} />
           <Route path="/farmer/orders" element={<FarmerOrders />} />
           <Route path="/farmer/about" element={<About />} />
+          <Route path="/farmer/myprofile" element={<FarmerProfile />} />
         </Route>
 
         {/* 🛠 ADMIN */}
