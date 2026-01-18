@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { User, Mail, Lock, Check, AlertCircle } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../util";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = ({ setIsAuthenticated, setRole }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [user, setUser] = useState("");
+  const [isLoading, setLoading] = useState(false)
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [formData, setFormData] = useState({
     user: "customer",
@@ -39,9 +40,11 @@ const Login = ({ setIsAuthenticated, setRole }) => {
   // On submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validation()) {
       if (isLoginMode) {
         try {
+          setLoading(true)
           const payload = {
             email: formData.email.trim(),
             password: formData.password
@@ -80,6 +83,8 @@ const Login = ({ setIsAuthenticated, setRole }) => {
           // network / server error
           console.log(error)
           handleError("Server not responding. Please try again later.");
+        } finally {
+          setLoading(false)
         }
 
 
@@ -87,6 +92,7 @@ const Login = ({ setIsAuthenticated, setRole }) => {
       } else {
         // Signup logic
         try {
+          setLoading(true)
           const payload = {
             role: formData.user,
             email: formData.email,
@@ -125,6 +131,8 @@ const Login = ({ setIsAuthenticated, setRole }) => {
           }
         } catch (error) {
           handleError(error);
+        } finally {
+          setLoading(false)
         }
       }
 
@@ -286,7 +294,7 @@ const Login = ({ setIsAuthenticated, setRole }) => {
           >
             <option value="customer">Customer</option>
             <option value="farmer">Farmer</option>
-            
+
           </select>
         )}
 
@@ -382,17 +390,27 @@ const Login = ({ setIsAuthenticated, setRole }) => {
         {/* Submit */}
         <button
           type="submit"
-          // onClick={validation}
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+          
+          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition relative flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed "
+        disabled = {isLoading}
         >
-          {isLoginMode ? "Login" : "Sign Up"}
-        </button>
+          {isLoading ? (
+            <>
+              <div className="w-5 h-5 border-2 border-green border-t-green-600 rounded-full animate-spin" />
 
+            </>
+          ) : (
+            <>
+              {isLoginMode ? "Login" : "Sign Up"}
+            </>
+          )}
+        </button>
         <p className="text-center text-sm">
           {isLoginMode ? "Don't have an account? " : "Already have an account? "}
           <a
             href="#"
-            className="text-green-600 hover:underline"
+            className="text-green-600 hover:underline relative "
+            disable={isLoading === true}
             onClick={(e) => {
               e.preventDefault();
               setIsLoginMode(!isLoginMode);
@@ -401,6 +419,12 @@ const Login = ({ setIsAuthenticated, setRole }) => {
             {isLoginMode ? "Signup now" : "Login"}
           </a>
         </p>
+        <button
+
+
+        >
+
+        </button>
       </form>
       <ToastContainer />
     </div>

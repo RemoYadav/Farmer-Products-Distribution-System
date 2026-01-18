@@ -43,7 +43,7 @@ exports.getNotifications = async (req, res) => {
     const notifications = await Notification.find(filter)
       .populate("senderId", "name role")
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit();
 
     res.json({
       success: true,

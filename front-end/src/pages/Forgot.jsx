@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Mail, Lock, Check, AlertCircle } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../util";
@@ -13,6 +13,7 @@ const Login = () => {
     const inputsRef = React.useRef([]);
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
+    const [isLoading, setLoading] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState("")
     const [changePasswordMode, setChangePasswordMode] = useState(false)
     // Error handling
@@ -42,11 +43,13 @@ const Login = () => {
         if (!validation()) return;
 
         try {
+            setLoading(true)
             // SEND OTP
             if (otpSendMode) {
                 const res = await axios.post(`${API_BASE_URL}/forgot/send-otp`, { email });
 
                 handleSuccess(res.data.message || "OTP sent");
+                setLoading(false)
                 setOtpSendMOde(false);
                 return;
             }
@@ -59,13 +62,16 @@ const Login = () => {
                     handleError("Please enter to complete OTP");
                     return;
                 }
+                setLoading(true)
                 const res = await axios.post(`${API_BASE_URL}/forgot/verify-otp`, {
                     email,
                     otp: otpString,
                 });
 
                 handleSuccess(res.data.message || " Your OTP verified");
+
                 setOtp(Array(6).fill(""));
+                setLoading(false)
                 setChangePasswordMode(true);
                 return;
             }
@@ -75,22 +81,25 @@ const Login = () => {
                 handleError("Passwords do not match");
                 return;
             }
-
+            setLoading(true)
             await axios.post(`${API_BASE_URL}/forgot/reset-password`, {
                 email,
                 password,
             });
 
             handleSuccess("Password changed successfully");
-            setTimeout(() =>{
+            setLoading(false)
+            setTimeout(() => {
                 navigate("/login");
-            },1000
-                
+            }, 1000
+
 
             )
 
         } catch (err) {
             handleError(err.response?.data?.message || "Server not responding? Please try again later.");
+        }finally{
+            setLoading(false)
         }
     };
     const validation = () => {
@@ -127,7 +136,7 @@ const Login = () => {
             }
         }
 
-        return true; 
+        return true;
     };
     return (
 
@@ -280,13 +289,25 @@ const Login = () => {
                 <button
                     type="submit"
                     // onClick={validation}
-                    className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+                    disabled={isLoading}
+                    className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 flex items-center justify-center transition disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                    {otpSendMode
-                        ? "Send OTP"
-                        : changePasswordMode
-                            ? "Change Password"
-                            : "Verify OTP"}
+                    {isLoading ? (
+                        <>
+                            <div className="w-5 h-5 border-2 border-white border-t-green-600 rounded-full animate-spin" />
+
+                        </>
+                    ) : (
+                        <>
+                            {otpSendMode
+                                ? "Send OTP"
+                                : changePasswordMode
+                                    ? "Change Password"
+                                    : "Verify OTP"}
+                        </>
+
+                    )}
+
                 </button>
 
                 <p className="text-center text-sm">
@@ -296,12 +317,12 @@ const Login = () => {
                         className="text-green-600 hover:underline"
                         onClick={(e) => {
                             e.preventDefault();
-                            if(otpSendMode){
+                            if (otpSendMode) {
                                 navigate("/login");
 
-                            }else{
+                            } else {
                                 setOtpSendMOde(!otpSendMode);
-                                
+
                             }
                         }}
                     >

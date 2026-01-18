@@ -14,13 +14,14 @@ const NotificationDrawer = () => {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0  bg-white z-50 shadow-xl
+        className={`fixed top-0 right-0 h-screen w-80 bg-white z-50 shadow-xl
         transform transition-transform duration-300 ease-in-out
-        ${open ? "translate-x-0" : "translate-x-full"}`}
+        ${open ? "translate-x-0" : "translate-x-full"}
+        flex flex-col`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h3 className="text-lg font-semibold mr-2">Notifications</h3>
+        {/* Header (fixed) */}
+        <div className="flex items-center justify-between p-4 border-b shrink-0">
+          <h3 className="text-lg font-semibold">Notifications</h3>
           <button
             onClick={markAllRead}
             className="text-sm text-green-600 hover:underline"
@@ -29,20 +30,8 @@ const NotificationDrawer = () => {
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-4 space-y-3 overflow-y-auto ">
-            <div className="flex justify-between">
-                <button
-            onClick={markAllRead}
-            className="text-sm text-green-600 hover:underline"
-          >
-            {/* Clear all */}
-          </button> <button
-            onClick={markAllRead}
-            className="text-sm text- hover:underline"
-          >
-            {/* Preview all */}
-          </button></div>
+        {/* Body (scrollable) */}
+        <div className="flex-1 p-4 space-y-3 overflow-y-auto">
           {notifications.length === 0 && (
             <p className="text-gray-500 text-center mt-10">
               No new notifications
@@ -53,9 +42,11 @@ const NotificationDrawer = () => {
             <div
               key={n._id}
               className={`p-3 rounded-lg border transition
-              ${!n.isRead
-                ? "bg-green-100 border-green-400"
-                : "bg-white-50 border-grey-300"}`}
+              ${
+                !n.isRead
+                  ? "bg-green-100 border-green-400"
+                  : "bg-white border-gray-300"
+              }`}
             >
               <p className="text-sm">{n.message}</p>
               <span className="text-xs text-gray-500">
