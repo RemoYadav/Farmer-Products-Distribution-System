@@ -206,7 +206,7 @@ export default function AdminProducts() {
                         className="border rounded px-2 py-1"
                       />
                     ) : (
-                      `₹${product.price}/${product.unit}`
+                      `रु${product.price}/${product.unit}`
                     )}
                   </td>
 
