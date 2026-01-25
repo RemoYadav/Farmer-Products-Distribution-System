@@ -308,7 +308,7 @@ const FarmerOrders = () => {
                                     <td>{order.productName}</td>
                                     <td>{order.price}</td>
                                     <td>{order.quantity}</td>
-                                    <td>₹{order.totalPrice}</td>
+                                    <td>रु{order.totalPrice}</td>
                                     <td className="capitalize font-semibold">
                                         {order.status}
                                     </td>
