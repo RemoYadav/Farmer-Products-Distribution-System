@@ -469,7 +469,7 @@ useEffect(() => {
                     </div>
                   </div>
                   <div className="stat-box">
-                    <IndianRupee className="product-stat-icon" />
+                    रु
                     <div>
                       <p className="stat-label">Inventory Value</p>
                       <p className="stat-value">{getTotalValue()}</p>
